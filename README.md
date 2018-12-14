@@ -1,1 +1,3 @@
-# wordpress
+FROM centos
+
+MAINTAINER "Hiroki Takeyama"
