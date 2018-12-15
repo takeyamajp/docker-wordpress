@@ -33,7 +33,9 @@ RUN mkdir /wordpress; \
 RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'if [ -e /tmp/latest.tar.gz ]; then'; \
-    echo '    tar -xzvf /tmp/latest.tar.gz -C /'; \
+    echo '    if [ -z "$(ls /wordpress)" ]; then'; \
+    echo '        tar -xzvf /tmp/latest.tar.gz -C /'; \
+    echo '    fi'; \
     echo '    rm /tmp/latest.tar.gz'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
