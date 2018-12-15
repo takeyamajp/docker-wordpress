@@ -10,9 +10,9 @@ RUN yum -y install httpd mod_ssl; yum clean all; \
     sed -i 's/DocumentRoot "\/var\/www\/html"/DocumentRoot "\/wordpress"/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">"/1' /etc/httpd/conf/httpd.conf; \
     { \
-      echo '<Directory /wordpress>'; \
-      echo '    AllowOverride All'; \
-      echo '</Directory>'; \
+    echo '<Directory /wordpress>'; \
+    echo '  AllowOverride All'; \
+    echo '</Directory>'; \
     } >> /etc/httpd/conf/httpd.conf;
 
 # prevent error AH00558 on stdout
