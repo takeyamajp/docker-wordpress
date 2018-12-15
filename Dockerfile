@@ -27,13 +27,13 @@ RUN yum -y install epel-release; yum clean all; \
 # WordPress
 RUN mkdir /wordpress; \
     yum -y install wget; yum clean all; \
-    wget https://wordpress.org/latest.tar.gz -P /tmp; \
-    tar -xzvf /tmp/latest.tar.gz -C /; \
-    rm /tmp/latest.tar.gz;
+    wget https://wordpress.org/latest.tar.gz -P /tmp;
 
 # entrypoint
 RUN { \
     echo '#!/bin/bash -eu'; \
+    echo 'tar -xzvf /tmp/latest.tar.gz -C /'; \
+    echo 'rm /tmp/latest.tar.gz'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
