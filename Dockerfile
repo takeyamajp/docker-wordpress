@@ -34,7 +34,7 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'if [ -e /tmp/latest.tar.gz ]; then'; \
     echo '    if [ -z "$(ls /wordpress)" ]; then'; \
-    echo '        tar -xzvf /tmp/latest.tar.gz -C /'; \
+    echo '        tar -xzf /tmp/latest.tar.gz -C /'; \
     echo '    fi'; \
     echo '    rm /tmp/latest.tar.gz'; \
     echo 'fi'; \
