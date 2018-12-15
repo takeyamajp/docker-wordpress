@@ -1,4 +1,4 @@
-FROM centos7
+FROM centos:centos7
 MAINTAINER "Hiroki Takeyama"
 
 # timezone
