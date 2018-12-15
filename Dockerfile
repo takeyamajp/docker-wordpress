@@ -32,8 +32,10 @@ RUN mkdir /wordpress; \
 # entrypoint
 RUN { \
     echo '#!/bin/bash -eu'; \
-    echo 'tar -xzvf /tmp/latest.tar.gz -C /'; \
-    echo 'rm /tmp/latest.tar.gz'; \
+    echo 'if [ -e /tmp/latest.tar.gz ]; then'; \
+    echo '    tar -xzvf /tmp/latest.tar.gz -C /'; \
+    echo '    rm /tmp/latest.tar.gz'; \
+    echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
