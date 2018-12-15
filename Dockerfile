@@ -1,4 +1,4 @@
-FROM centos
+FROM centos7
 MAINTAINER "Hiroki Takeyama"
 
 # timezone
@@ -10,18 +10,18 @@ RUN yum -y install httpd mod_ssl; yum clean all; \
     sed -i 's/DocumentRoot "\/var\/www\/html"/DocumentRoot "\/wordpress"/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">"/1' /etc/httpd/conf/httpd.conf; \
     { \
-    echo '<Directory /wordpress>'; \
-    echo '    AllowOverride All'; \
-    echo '</Directory>'; \
+      echo '<Directory /wordpress>'; \
+      echo '    AllowOverride All'; \
+      echo '</Directory>'; \
     } >> /etc/httpd/conf/httpd.conf;
 
 # prevent error AH00558 on stdout
 RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf
 
-# PHP
+# PHP (remi for CentOS7)
 RUN yum -y install epel-release; yum clean all; \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
-    yum -y install --enablerepo=remi --enablerepo=remi-php72 php php-mbstring php-curl php-mysqlnd; yum clean all; \
+    yum -y install --enablerepo=remi,remi-php72 php php-mbstring php-curl php-mysqlnd; yum clean all; \
     sed -i 's/^;date\.timezone =$/date\.timezone=Asia\/Tokyo/1' /etc/php.ini;
 
 # WordPress
@@ -33,10 +33,10 @@ RUN mkdir /wordpress; \
 RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'if [ -e /tmp/latest.tar.gz ]; then'; \
-    echo '    if [ -z "$(ls /wordpress)" ]; then'; \
-    echo '        tar -xzf /tmp/latest.tar.gz -C /'; \
-    echo '    fi'; \
-    echo '    rm /tmp/latest.tar.gz'; \
+    echo '  if [ -z "$(ls /wordpress)" ]; then'; \
+    echo '    tar -xzf /tmp/latest.tar.gz -C /'; \
+    echo '  fi'; \
+    echo '  rm /tmp/latest.tar.gz'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
