@@ -12,7 +12,7 @@ RUN yum -y install httpd mod_ssl; yum clean all; \
     sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">/1' /etc/httpd/conf/httpd.conf;
 
 # prevent error AH00558 on stdout
-RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf
+RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 
 # PHP (remi for CentOS7)
 RUN yum -y install epel-release; yum clean all; \
