@@ -1,3 +1,3 @@
-FROM centos
+FROM centos:centos7
 
 MAINTAINER "Hiroki Takeyama"
