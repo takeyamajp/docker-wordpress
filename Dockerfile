@@ -8,12 +8,8 @@ RUN rm -f /etc/localtime; \
 # httpd
 RUN yum -y install httpd mod_ssl; yum clean all; \
     sed -i 's/DocumentRoot "\/var\/www\/html"/DocumentRoot "\/wordpress"/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">"/1' /etc/httpd/conf/httpd.conf; \
-    { \
-    echo '<Directory /wordpress>'; \
-    echo '  AllowOverride All'; \
-    echo '</Directory>'; \
-    } >> /etc/httpd/conf/httpd.conf;
+    sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/AllowOverride None/AllowOverride All/1' /etc/httpd/conf/httpd.conf;
+    sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">/1' /etc/httpd/conf/httpd.conf; \
 
 # prevent error AH00558 on stdout
 RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf
