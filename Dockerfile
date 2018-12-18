@@ -31,12 +31,12 @@ RUN { \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
     echo '  {'; \
-    echo '    echo "<IfModule mod_rewrite.c>"'; \
-    echo '    echo "RewriteEngine On"'; \
-    echo '    echo "RewriteCond %{HTTPS} off"'; \
-    echo '    echo "RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"'; \
-    echo '    echo "RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
-    echo '    echo "</IfModule>"'; \
+    echo '  echo "<IfModule mod_rewrite.c>"'; \
+    echo '  echo "RewriteEngine On"'; \
+    echo '  echo "RewriteCond %{HTTPS} off"'; \
+    echo '  echo "RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"'; \
+    echo '  echo "RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
+    echo '  echo "</IfModule>"'; \
     echo '  } > /wordpress/.htaccess'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
