@@ -37,7 +37,7 @@ RUN { \
     echo '  echo "RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"'; \
     echo '  echo "RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
     echo '  echo "</IfModule>"'; \
-    echo '  } > /wordpress/.htaccess'; \
+    echo '  } >> /wordpress/.htaccess'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
