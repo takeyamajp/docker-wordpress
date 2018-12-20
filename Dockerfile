@@ -46,7 +46,7 @@ RUN { \
     echo '  echo "# END REQUIRE SSL"'; \
     echo '  } > /wordpress/htaccess'; \
     echo '  if [ -e /wordpress/.htaccess ]; then'; \
-    echo '    cat /wordpress/.htaccess > /wordpress/htaccess'; \
+    echo '    cat /wordpress/.htaccess >> /wordpress/htaccess'; \
     echo '  fi'; \
     echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
     echo 'fi'; \
