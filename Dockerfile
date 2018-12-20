@@ -30,14 +30,19 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
+    echo '  if [ -e /wordpress/.htaccess ]; then'; \
+    echo '    sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
+    echo '  fi'; \
     echo '  if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
     echo '    {'; \
+    echo '    echo "# BEGIN REQUIRE SSL"'; \
     echo '    echo "<IfModule mod_rewrite.c>"'; \
     echo '    echo "  RewriteEngine On"'; \
     echo '    echo "  RewriteCond %{HTTPS} off"'; \
     echo '    echo "  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"'; \
     echo '    echo "  RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
     echo '    echo "</IfModule>"'; \
+    echo '    echo "# END REQUIRE SSL"'; \
     echo '    } >> /wordpress/.htaccess'; \
     echo '  fi'; \
     echo 'fi'; \
