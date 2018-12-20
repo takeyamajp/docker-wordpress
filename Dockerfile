@@ -35,7 +35,7 @@ RUN { \
     echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
     echo 'fi'; \
     echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
-    echo '  sed -i 's/^# END WordPress$/# END WordPress\\n/g' /wordpress/.htaccess'; \
+    echo '  sed -i '\''s/^# END WordPress$/# END WordPress\n/g'\'' /wordpress/.htaccess'; \
     echo '  {'; \
     echo '  echo "# BEGIN REQUIRE SSL"'; \
     echo '  echo "<IfModule mod_rewrite.c>"'; \
