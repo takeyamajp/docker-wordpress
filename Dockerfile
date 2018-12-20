@@ -30,20 +30,24 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
-    echo '  {'; \
-    echo '  echo "<IfModule mod_rewrite.c>"'; \
-    echo '  echo "  RewriteEngine On"'; \
-    echo '  echo "  RewriteCond %{HTTPS} off"'; \
-    echo '  echo "  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"'; \
-    echo '  echo "  RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
-    echo '  echo "</IfModule>"'; \
-    echo '  } >> /wordpress/.htaccess'; \
+    echo '  if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
+    echo '    {'; \
+    echo '    echo "<IfModule mod_rewrite.c>"'; \
+    echo '    echo "  RewriteEngine On"'; \
+    echo '    echo "  RewriteCond %{HTTPS} off"'; \
+    echo '    echo "  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"'; \
+    echo '    echo "  RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
+    echo '    echo "</IfModule>"'; \
+    echo '    } >> /wordpress/.htaccess'; \
+    echo '  fi'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
     chmod +x /usr/local/bin/entrypoint.sh;
 ENTRYPOINT ["entrypoint.sh"]
+
+ENV REQUIRE_SSL true
 
 VOLUME /wordpress
 
