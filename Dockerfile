@@ -31,7 +31,7 @@ RUN { \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
     echo '  if [ -e /wordpress/.htaccess ]; then'; \
-    echo '    sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
+    echo '    sed -i '\''/^# BEGIN REQUIRE SSL\$/,/^# END REQUIRE SSL\$/d'\'' /wordpress/.htaccess'; \
     echo '  fi'; \
     echo '  if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
     echo '    {'; \
