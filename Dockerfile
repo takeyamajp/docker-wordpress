@@ -33,7 +33,6 @@ RUN { \
     echo 'fi'; \
     echo 'if [ -e /wordpress/.htaccess ]; then'; \
     echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
-    echo '  sed -i '\''s/^# END WordPress$/# END WordPress\n/g'\'' /wordpress/.htaccess'; \
     echo 'fi'; \
     echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
     echo '  {'; \
@@ -45,7 +44,11 @@ RUN { \
     echo '  echo "  RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
     echo '  echo "</IfModule>"'; \
     echo '  echo "# END REQUIRE SSL"'; \
-    echo '  } >> /wordpress/.htaccess'; \
+    echo '  } > /wordpress/htaccess'; \
+    echo '  if [ -e /wordpress/.htaccess ]; then'; \
+    echo '    cat /wordpress/.htaccess > /wordpress/htaccess'; \
+    echo '  fi'; \
+    echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
