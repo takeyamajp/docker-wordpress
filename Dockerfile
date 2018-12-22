@@ -93,7 +93,6 @@ RUN { \
     echo 'set_config '\''DB_PASSWORD'\'' "$WORDPRESS_DB_PASSWORD"'; \
     echo 'set_config '\''DB_NAME'\'' "$WORDPRESS_DB_NAME"'; \
     echo 'set_config '\''DB_CHARSET'\'' "$WORDPRESS_DB_CHARSET"'; \
-    echo 'set_config '\''DB_COLLATE'\'' "$WORDPRESS_DB_COLLATE"'; \
     echo 'for uniqueKey in "${uniqueKeys[@]}"; do'; \
     echo '  currentValue="$(sed -rn -e "s/define\((([\'\''\"])$uniqueKey\2\s*,\s*)(['\''\"])(.*)\3\);/\4/p" /wordpress/wp-config.php)"'; \
     echo '  if [ "$currentValue" = '\''put your unique phrase here'\'' ]; then'; \
@@ -113,7 +112,6 @@ ENV WORDPRESS_DB_USER user
 ENV WORDPRESS_DB_PASSWORD user
 ENV WORDPRESS_DB_NAME db
 ENV WORDPRESS_DB_CHARSET utf8mb4
-ENV WORDPRESS_DB_COLLATE
 
 VOLUME /wordpress
 
