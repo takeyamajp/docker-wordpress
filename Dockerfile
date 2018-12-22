@@ -50,7 +50,7 @@ RUN { \
     echo '  fi'; \
     echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
     echo 'fi'; \
-    echo 'if [ -e /wordpress/wp-config.php ]; then'; \
+    echo 'if [ ! -e /wordpress/wp-config.php ]; then'; \
     echo '  cp /wordpress/wp-config-sample.php /wordpress/wp-config.php'; \
     echo 'fi'; \
     echo 'uniqueKeys=('; \
