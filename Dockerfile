@@ -51,7 +51,6 @@ RUN { \
     echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
-    echo 'cp /usr/local/bin/entrypoint.sh /wordpress/entrypoint.txt'; \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
     chmod +x /usr/local/bin/entrypoint.sh;
