@@ -64,44 +64,45 @@ RUN { \
     echo '  NONCE_SALT'; \
     echo ')'; \
     echo 'sed_escape_lhs() {'; \
-    echo '  echo "\$@" | sed -e '\''s/[]\/$*.^|[]/\\&/g'\'''; \
+    echo '  echo "$@" | sed -e '\''s/[]\/$*.^|[]/\\&/g'\'''; \
     echo '}'; \
     echo 'sed_escape_rhs() {'; \
-    echo '  echo "\$@" | sed -e '\''s/[\/&]/\\&/g'\'''; \
+    echo '  echo "$@" | sed -e '\''s/[\/&]/\\&/g'\'''; \
     echo '}'; \
     echo 'php_escape() {'; \
-    echo '  local escaped="\$(php -r '\''var_export(('\''"\$2"'\'') \$argv[1]);'\'' -- "\$1")"'; \
-    echo '  if [ "\$2" = '\''string'\'' ] && [ "\${escaped:0:1}" = "'\''" ]; then'; \
-    echo '  escaped="\${escaped//\$'\''\n'\''/"'\'' + \"\\n\" + '\''"}"'; \
+    echo '  local escaped="$(php -r '\''var_export(('\''"$2"'\'') $argv[1]);'\'' -- "$1")"'; \
+    echo '  if [ "$2" = '\''string'\'' ] && [ "${escaped:0:1}" = "'\''" ]; then'; \
+    echo '  escaped="${escaped//$'\''\n'\''/"'\'' + \"\\n\" + '\''"}"'; \
     echo '  fi'; \
-    echo '  echo "\$escaped"'; \
+    echo '  echo "$escaped"'; \
     echo '}'; \
     echo 'set_config() {'; \
-    echo '  key="\$1"'; \
-    echo '  value="\$2"'; \
-    echo '  var_type="\${3:-string}"'; \
-    echo '  start="(['\''\"])\$(sed_escape_lhs "\$key")\2\s*,"'; \
+    echo '  key="$1"'; \
+    echo '  value="$2"'; \
+    echo '  var_type="${3:-string}"'; \
+    echo '  start="(['\''\"])$(sed_escape_lhs "$key")\2\s*,"'; \
     echo '  end="\);"'; \
-    echo '  if [ "\${key:0:1}" = '\''\$'\'' ]; then'; \
-    echo '    start="^(\s*)\$(sed_escape_lhs "\$key")\s*="'; \
+    echo '  if [ "${key:0:1}" = '\''$'\'' ]; then'; \
+    echo '    start="^(\s*)$(sed_escape_lhs "$key")\s*="'; \
     echo '    end=";"'; \
     echo '  fi'; \
-    echo '  sed -ri -e "s/(\$start\s*).*(\$end)\$/\1\$(sed_escape_rhs "\$(php_escape "\$value" "\$var_type")")\3/" /wordpress/wp-config.php'; \
+    echo '  sed -ri -e "s/($start\s*).*($end)$/\1$(sed_escape_rhs "$(php_escape "$value" "$var_type")")\3/" /wordpress/wp-config.php'; \
     echo '}'; \
     echo 'set_config '\''DB_HOST'\'' "$WORDPRESS_DB_HOST"'; \
     echo 'set_config '\''DB_USER'\'' "$WORDPRESS_DB_USER"'; \
     echo 'set_config '\''DB_PASSWORD'\'' "$WORDPRESS_DB_PASSWORD"'; \
     echo 'set_config '\''DB_NAME'\'' "$WORDPRESS_DB_NAME"'; \
     echo 'set_config '\''DB_CHARSET'\'' "$WORDPRESS_DB_CHARSET"'; \
-    echo 'for uniqueKey in "\${uniqueKeys[@]}"; do'; \
-    echo '  currentValue="\$(sed -rn -e "s/define\((([\'\''\"])\$uniqueKey\2\s*,\s*)(['\''\"])(.*)\3\);/\4/p" /wordpress/wp-config.php)"'; \
-    echo '  if [ "\$currentValue" = '\''put your unique phrase here'\'' ]; then'; \
-    echo '    set_config "\$uniqueKey" "\$(head -c1m /dev/urandom | sha1sum | cut -d'\'' '\'' -f1)"'; \
+    echo 'for uniqueKey in "${uniqueKeys[@]}"; do'; \
+    echo '  currentValue="$(sed -rn -e "s/define\((([\'\''\"])$uniqueKey\2\s*,\s*)(['\''\"])(.*)\3\);/\4/p" /wordpress/wp-config.php)"'; \
+    echo '  if [ "$currentValue" = '\''put your unique phrase here'\'' ]; then'; \
+    echo '    set_config "$uniqueKey" "$(head -c1m /dev/urandom | sha1sum | cut -d'\'' '\'' -f1)"'; \
     echo '  fi'; \
     echo 'done'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
+    cp /usr/local/bin/entrypoint.sh /wordpress/entrypoint.tct; \
     chmod +x /usr/local/bin/entrypoint.sh;
 ENTRYPOINT ["entrypoint.sh"]
 
