@@ -86,7 +86,7 @@ RUN { \
     echo '    start="^(\s*)$(sed_escape_lhs "$key")\s*="'; \
     echo '    end=";"'; \
     echo '  fi'; \
-    echo '  sed -ri -e "s/($start\s*).*($end)$/\1$(sed_escape_rhs "$(php_escape "$value" "$var_type")")\3/" /wordpress/wp-config.php'; \
+    echo '  sed -ri -e "s/($start\s*).*($end)/\1$(sed_escape_rhs "$(php_escape "$value" "$var_type")")\3/" /wordpress/wp-config.php'; \
     echo '}'; \
     echo 'set_config '\''DB_HOST'\'' "$WORDPRESS_DB_HOST"'; \
     echo 'set_config '\''DB_USER'\'' "$WORDPRESS_DB_USER"'; \
