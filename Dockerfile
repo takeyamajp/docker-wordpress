@@ -86,7 +86,7 @@ RUN { \
     echo '    start="^(\s*)$(sed_escape_lhs "$key")\s*="'; \
     echo '    end=";"'; \
     echo '  fi'; \
-    echo '  sed -ri -e "s/($start\s*).*($end)$/\1$(sed_escape_rhs "$(php_escape "$value" "$var_type")")\3/" wp-config.php'; \
+    echo '  sed -ri -e "s/($start\s*).*($end)$/\1$(sed_escape_rhs "$(php_escape "$value" "$var_type")")\3/" /wordpress/wp-config.php'; \
     echo '}'; \
     echo 'set_config '\''DB_HOST'\'' "$WORDPRESS_DB_HOST"'; \
     echo 'set_config '\''DB_USER'\'' "$WORDPRESS_DB_USER"'; \
@@ -95,7 +95,7 @@ RUN { \
     echo 'set_config '\''DB_CHARSET'\'' "$WORDPRESS_DB_CHARSET"'; \
     echo 'set_config '\''DB_COLLATE'\'' "$WORDPRESS_DB_COLLATE"'; \
     echo 'for uniqueKey in "${uniqueKeys[@]}"; do'; \
-    echo '  currentValue="$(sed -rn -e "s/define\((([\'\''\"])$uniqueKey\2\s*,\s*)(['\''\"])(.*)\3\);/\4/p" wp-config.php)"'; \
+    echo '  currentValue="$(sed -rn -e "s/define\((([\'\''\"])$uniqueKey\2\s*,\s*)(['\''\"])(.*)\3\);/\4/p" /wordpress/wp-config.php)"'; \
     echo '  if [ "$currentValue" = '\''put your unique phrase here'\'' ]; then'; \
     echo '    set_config "$uniqueKey" "$(head -c1m /dev/urandom | sha1sum | cut -d'\'' '\'' -f1)"'; \
     echo '  fi'; \
