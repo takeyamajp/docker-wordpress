@@ -3,6 +3,10 @@ MAINTAINER "Hiroki Takeyama"
 
 ENV REQUIRE_SSL true
 
+ENV REQUIRE_BASIC_AUTH false  
+ENV BASIC_AUTH_USER user  
+ENV BASIC_AUTH_PASSWORD user
+
 VOLUME /wordpress
 
 EXPOSE 80  
