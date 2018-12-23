@@ -50,6 +50,23 @@ RUN { \
     echo '  fi'; \
     echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
     echo 'fi'; \
+    echo 'if [ -e /wordpress/.htpasswd ]; then'; \
+    echo '  sed -i '\''/^# BEGIN BASIC AUTH$/,/^# END BASIC AUTH$/d'\'' /etc/httpd/conf.d/basicAuth.conf'; \
+    echo '  rm -f /wordpress/.htpasswd'; \
+    echo 'fi'; \
+    echo 'if [ ${REQUIRE_BASIC_AUTH,,} = "true" ]; then'; \
+    echo '  {'; \
+    echo '  echo "# BEGIN BASIC AUTH"'; \
+    echo '  echo "<Directory /wordpress/>"'; \
+    echo '  echo "  AuthType Basic"'; \
+    echo '  echo "  AuthName '\''Basic Authentication'\''"'; \
+    echo '  echo "  AuthUserFile /wordpress/.htpasswd"'; \
+    echo '  echo "  Require valid-user"'; \
+    echo '  echo "</Directory>"'; \
+    echo '  echo "# END BASIC AUTH"'; \
+    echo '  } >> /etc/httpd/conf.d/basicAuth.conf'; \
+    echo '  htpasswd -bmc /wordpress/.htpasswd ${BASIC_AUTH_USER} ${BASIC_AUTH_PASSWORD} &>/dev/null'; \
+    echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
@@ -57,6 +74,10 @@ RUN { \
 ENTRYPOINT ["entrypoint.sh"]
 
 ENV REQUIRE_SSL true
+
+ENV REQUIRE_BASIC_AUTH false
+ENV BASIC_AUTH_USER user
+ENV BASIC_AUTH_PASSWORD user
 
 VOLUME /wordpress
 
