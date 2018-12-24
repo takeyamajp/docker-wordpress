@@ -69,10 +69,10 @@ RUN { \
     echo 'if [ ${WP_STOP_AUTOSAVE,,} = "true" ]; then'; \
     echo '  {'; \
     echo '  echo "// BEGIN STOP AUTOSAVE"'; \
-    echo '  echo "function stop_autosave(){'; \
-    echo '  echo "  wp_deregister_script('\''autosave'\'');'; \
-    echo '  echo "}'; \
-    echo '  echo "add_action('\''wp_print_scripts'\'', '\''stop_autosave'\'');'; \
+    echo '  echo "function stop_autosave(){"'; \
+    echo '  echo "  wp_deregister_script('\''autosave'\'');"'; \
+    echo '  echo "}"'; \
+    echo '  echo "add_action('\''wp_print_scripts'\'', '\''stop_autosave'\'');"'; \
     echo '  echo "// END STOP AUTOSAVE"'; \
     echo '  } >> /wordpress/wp-includes/functions.php'; \
     echo 'fi'; \
