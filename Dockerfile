@@ -2,73 +2,73 @@ FROM centos:centos7
 MAINTAINER "Hiroki Takeyama"
 
 # timezone
-RUN rm -f /etc/localtime \
-    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN rm -f /etc/localtime; \
+    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;
 
 # httpd
-RUN yum -y install httpd mod_ssl; yum clean all \
-    sed -i 's/DocumentRoot "\/var\/www\/html"/DocumentRoot "\/wordpress"/1' /etc/httpd/conf/httpd.conf \
-    sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/AllowOverride None/AllowOverride All/1' /etc/httpd/conf/httpd.conf \
-    sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">/1' /etc/httpd/conf/httpd.conf
+RUN yum -y install httpd mod_ssl; yum clean all; \
+    sed -i 's/DocumentRoot "\/var\/www\/html"/DocumentRoot "\/wordpress"/1' /etc/httpd/conf/httpd.conf; \
+    sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/AllowOverride None/AllowOverride All/1' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">/1' /etc/httpd/conf/httpd.conf;
 
 # prevent error AH00558 on stdout
-RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf
+RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 
 # PHP (remi for CentOS7)
-RUN yum -y install epel-release; yum clean all \
-    rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm \
-    yum -y install --enablerepo=remi,remi-php72 php php-mbstring php-curl php-mysqlnd; yum clean all \
-    sed -i 's/^;date\.timezone =$/date\.timezone=Asia\/Tokyo/1' /etc/php.ini
+RUN yum -y install epel-release; yum clean all; \
+    rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
+    yum -y install --enablerepo=remi,remi-php72 php php-mbstring php-curl php-mysqlnd; yum clean all; \
+    sed -i 's/^;date\.timezone =$/date\.timezone=Asia\/Tokyo/1' /etc/php.ini;
 
 # WordPress
-RUN mkdir /wordpress \
-    yum -y install wget; yum clean all \
-    wget https://wordpress.org/latest.tar.gz -P /usr/src
+RUN mkdir /wordpress; \
+    yum -y install wget; yum clean all; \
+    wget https://wordpress.org/latest.tar.gz -P /usr/src;
 
 # entrypoint
 RUN { \
-    echo '#!/bin/bash -eu' \
-    echo 'if [ -z "$(ls /wordpress)" ]; then' \
-    echo '  tar -xzf /usr/src/latest.tar.gz -C /' \
-    echo 'fi' \
-    echo 'if [ -e /wordpress/.htaccess ]; then' \
-    echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess' \
-    echo 'fi' \
-    echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then' \
-    echo '  {' \
-    echo '  echo "# BEGIN REQUIRE SSL"' \
-    echo '  echo "<IfModule mod_rewrite.c>"' \
-    echo '  echo "  RewriteEngine On"' \
-    echo '  echo "  RewriteCond %{HTTPS} off"' \
-    echo '  echo "  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"' \
-    echo '  echo "  RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"' \
-    echo '  echo "</IfModule>"' \
-    echo '  echo "# END REQUIRE SSL"' \
-    echo '  } > /wordpress/htaccess' \
-    echo '  if [ -e /wordpress/.htaccess ]; then' \
-    echo '    cat /wordpress/.htaccess >> /wordpress/htaccess' \
-    echo '  fi' \
-    echo '  mv -f /wordpress/htaccess /wordpress/.htaccess' \
-    echo 'fi' \
-    echo 'if [ -e /wordpress/.htpasswd ]; then' \
-    echo '  rm -f /etc/httpd/conf.d/basicAuth.conf' \
-    echo '  rm -f /wordpress/.htpasswd' \
-    echo 'fi' \
-    echo 'if [ ${REQUIRE_BASIC_AUTH,,} = "true" ]; then' \
-    echo '  {' \
-    echo '  echo "<Directory /wordpress/>"' \
-    echo '  echo "  AuthType Basic"' \
-    echo '  echo "  AuthName '\''Basic Authentication'\''"' \
-    echo '  echo "  AuthUserFile /wordpress/.htpasswd"' \
-    echo '  echo "  Require valid-user"' \
-    echo '  echo "</Directory>"' \
-    echo '  } >> /etc/httpd/conf.d/basicAuth.conf' \
-    echo '  htpasswd -bmc /wordpress/.htpasswd ${BASIC_AUTH_USER} ${BASIC_AUTH_PASSWORD} &>/dev/null' \
-    echo 'fi' \
-    echo 'chown -R apache:apache /wordpress' \
-    echo 'exec "$@"' \
-    } > /usr/local/bin/entrypoint.sh \
-    chmod +x /usr/local/bin/entrypoint.sh
+    echo '#!/bin/bash -eu'; \
+    echo 'if [ -z "$(ls /wordpress)" ]; then'; \
+    echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
+    echo 'fi'; \
+    echo 'if [ -e /wordpress/.htaccess ]; then'; \
+    echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
+    echo 'fi'; \
+    echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
+    echo '  {'; \
+    echo '  echo "# BEGIN REQUIRE SSL"'; \
+    echo '  echo "<IfModule mod_rewrite.c>"'; \
+    echo '  echo "  RewriteEngine On"'; \
+    echo '  echo "  RewriteCond %{HTTPS} off"'; \
+    echo '  echo "  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"'; \
+    echo '  echo "  RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
+    echo '  echo "</IfModule>"'; \
+    echo '  echo "# END REQUIRE SSL"'; \
+    echo '  } > /wordpress/htaccess'; \
+    echo '  if [ -e /wordpress/.htaccess ]; then'; \
+    echo '    cat /wordpress/.htaccess >> /wordpress/htaccess'; \
+    echo '  fi'; \
+    echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
+    echo 'fi'; \
+    echo 'if [ -e /wordpress/.htpasswd ]; then'; \
+    echo '  rm -f /etc/httpd/conf.d/basicAuth.conf'; \
+    echo '  rm -f /wordpress/.htpasswd'; \
+    echo 'fi'; \
+    echo 'if [ ${REQUIRE_BASIC_AUTH,,} = "true" ]; then'; \
+    echo '  {'; \
+    echo '  echo "<Directory /wordpress/>"'; \
+    echo '  echo "  AuthType Basic"'; \
+    echo '  echo "  AuthName '\''Basic Authentication'\''"'; \
+    echo '  echo "  AuthUserFile /wordpress/.htpasswd"'; \
+    echo '  echo "  Require valid-user"'; \
+    echo '  echo "</Directory>"'; \
+    echo '  } >> /etc/httpd/conf.d/basicAuth.conf'; \
+    echo '  htpasswd -bmc /wordpress/.htpasswd ${BASIC_AUTH_USER} ${BASIC_AUTH_PASSWORD} &>/dev/null'; \
+    echo 'fi'; \
+    echo 'chown -R apache:apache /wordpress'; \
+    echo 'exec "$@"'; \
+    } > /usr/local/bin/entrypoint.sh; \
+    chmod +x /usr/local/bin/entrypoint.sh;
 ENTRYPOINT ["entrypoint.sh"]
 
 ENV REQUIRE_SSL true
