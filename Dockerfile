@@ -62,7 +62,7 @@ RUN { \
     echo '  echo "  AuthUserFile /wordpress/.htpasswd"'; \
     echo '  echo "  Require valid-user"'; \
     echo '  echo "</Directory>"'; \
-    echo '  } >> /etc/httpd/conf.d/basicAuth.conf'; \
+    echo '  } > /etc/httpd/conf.d/basicAuth.conf'; \
     echo '  htpasswd -bmc /wordpress/.htpasswd ${BASIC_AUTH_USER} ${BASIC_AUTH_PASSWORD} &>/dev/null'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
