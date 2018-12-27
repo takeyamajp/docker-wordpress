@@ -19,7 +19,7 @@ RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 # PHP (remi for CentOS7)
 RUN yum -y install epel-release; yum clean all; \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
-    yum -y install --disablerepo=ius --enablerepo=remi,remi-php73 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; yum clean all; \
+    yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; yum clean all; \
     sed -i 's/^;date\.timezone =$/date\.timezone=Asia\/Tokyo/1' /etc/php.ini;
 
 # WordPress
