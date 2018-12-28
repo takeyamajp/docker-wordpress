@@ -1,10 +1,6 @@
 FROM centos:centos7
 MAINTAINER "Hiroki Takeyama"
 
-# timezone
-RUN rm -f /etc/localtime; \
-    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;
-
 # httpd (ius for CentOS7)
 RUN yum -y install system-logos openssl mailcap; yum clean all; \
     yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; yum clean all; \
@@ -19,8 +15,7 @@ RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 # PHP (remi for CentOS7)
 RUN yum -y install epel-release; yum clean all; \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
-    yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; yum clean all; \
-    sed -i 's/^;date\.timezone =$/date\.timezone=Asia\/Tokyo/1' /etc/php.ini;
+    yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; yum clean all;
 
 # WordPress
 RUN mkdir /wordpress; \
@@ -30,6 +25,10 @@ RUN mkdir /wordpress; \
 # entrypoint
 RUN { \
     echo '#!/bin/bash -eu'; \
+    echo 'rm -f /etc/localtime'; \
+    echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
+    echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
+    echo 'sed -i "s/^;*date\.timezone =.*\$/date\.timezone =${ESC_TIMEZONE}/1" /etc/php.ini'; \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
     echo 'fi'; \
@@ -72,6 +71,8 @@ RUN { \
     } > /usr/local/bin/entrypoint.sh; \
     chmod +x /usr/local/bin/entrypoint.sh;
 ENTRYPOINT ["entrypoint.sh"]
+
+ENV TIMEZONE Asia/Tokyo
 
 ENV REQUIRE_SSL true
 
