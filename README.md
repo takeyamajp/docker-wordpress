@@ -1,6 +1,8 @@
 FROM centos:centos7  
 MAINTAINER "Hiroki Takeyama"
 
+ENV TIMEZONE Asia/Tokyo
+
 ENV REQUIRE_SSL true
 
 ENV REQUIRE_BASIC_AUTH false  
