@@ -55,12 +55,12 @@ RUN { \
     echo 'if [ ${ENABLE_GZIP_COMPRESSION,,} = "true" ]; then'; \
     echo '  {'; \
     echo '  echo "# BEGIN ENABLE GZIP COMPRESSION"'; \
-    echo '  echo "<IfModule mod_deflate.c>'; \
-    echo '  echo "<IfModule mod_filter.c>'; \
-    echo '  echo "  SetOutputFilter DEFLATE'; \
-    echo '  echo "  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary'; \
-    echo '  echo "</IfModule>'; \
-    echo '  echo "</IfModule>'; \
+    echo '  echo "<IfModule mod_deflate.c>"'; \
+    echo '  echo "<IfModule mod_filter.c>"'; \
+    echo '  echo "  SetOutputFilter DEFLATE"'; \
+    echo '  echo "  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary"'; \
+    echo '  echo "</IfModule>"'; \
+    echo '  echo "</IfModule>"'; \
     echo '  echo "# END ENABLE GZIP COMPRESSION"'; \
     echo '  } > /wordpress/htaccess'; \
     echo '  if [ -e /wordpress/.htaccess ]; then'; \
