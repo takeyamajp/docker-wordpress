@@ -22,7 +22,7 @@ RUN yum -y install epel-release; \
 # WordPress
 RUN mkdir /wordpress; \
     yum -y install --disablerepo=ius wget; yum clean all; \
-    wget https://wordpress.org/latest.tar.gz -P /usr/src;; \
+    wget https://wordpress.org/latest.tar.gz -P /usr/src; \
     yum clean all;
 
 # entrypoint
