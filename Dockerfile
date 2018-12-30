@@ -2,25 +2,28 @@ FROM centos:centos7
 MAINTAINER "Hiroki Takeyama"
 
 # httpd (ius for CentOS7)
-RUN yum -y install system-logos openssl mailcap; yum clean all; \
-    yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; yum clean all; \
-    yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; yum clean all; \
+RUN yum -y install system-logos openssl mailcap; \
+    yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
+    yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
     sed -i 's/DocumentRoot "\/var\/www\/html"/DocumentRoot "\/wordpress"/1' /etc/httpd/conf/httpd.conf; \
     sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/AllowOverride None/AllowOverride All/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">/1' /etc/httpd/conf/httpd.conf;
+    sed -i 's/<Directory "\/var\/www\/html">/<Directory "\/wordpress">/1' /etc/httpd/conf/httpd.conf; \
+    yum clean all;
 
 # prevent error AH00558 on stdout
 RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 
 # PHP (remi for CentOS7)
-RUN yum -y install epel-release; yum clean all; \
+RUN yum -y install epel-release; \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
-    yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; yum clean all;
+    yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; \
+    yum clean all;
 
 # WordPress
 RUN mkdir /wordpress; \
     yum -y install --disablerepo=ius wget; yum clean all; \
-    wget https://wordpress.org/latest.tar.gz -P /usr/src;
+    wget https://wordpress.org/latest.tar.gz -P /usr/src;; \
+    yum clean all;
 
 # entrypoint
 RUN { \
