@@ -1,4 +1,4 @@
-# wordpress
+# takeyamajp/wordpress
 [![Docker Stars](https://img.shields.io/docker/stars/takeyamajp/wordpress.svg?style=flat-square)](https://hub.docker.com/r/takeyamajp/wordpress/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/takeyamajp/wordpress.svg?style=flat-square)](https://hub.docker.com/r/takeyamajp/wordpress/)
 
