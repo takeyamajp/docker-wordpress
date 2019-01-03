@@ -1,6 +1,6 @@
 # wordpress
-[![Docker Stars](https://img.shields.io/docker/stars/takeyamajp/wordpress.svg?style=flat-square)](https://hub.docker.com/r/takeyamajp/wordpress/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/takeyamajp/wordpress.svg?style=flat-square)](https://hub.docker.com/r/takeyamajp/wordpress/)
+[![Docker Stars](https://img.shields.io/docker/stars/takeyamajp/wordpress.svg)](https://hub.docker.com/r/takeyamajp/wordpress/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/takeyamajp/wordpress.svg)](https://hub.docker.com/r/takeyamajp/wordpress/)
 [![license](https://img.shields.io/github/license/takeyamajp/docker-wordpress.svg)](https://github.com/takeyamajp/docker-wordpress/blob/master/LICENSE)
 
     FROM centos:centos7  
