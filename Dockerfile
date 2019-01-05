@@ -31,7 +31,7 @@ RUN { \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
-    echo 'sed -i "s/^;*date\.timezone =.*\$/date\.timezone =${ESC_TIMEZONE}/1" /etc/php.ini'; \
+    echo 'sed -i "s/^;*date\.timezone =.*/date\.timezone =${ESC_TIMEZONE}/1" /etc/php.ini'; \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
     echo 'fi'; \
