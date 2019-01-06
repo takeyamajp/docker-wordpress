@@ -15,6 +15,8 @@
     ENV BASIC_AUTH_USER user  
     ENV BASIC_AUTH_PASSWORD user
     
+    ENV HTTPD_LOG_LEVEL warn
+    
     VOLUME /wordpress
     
     EXPOSE 80  
