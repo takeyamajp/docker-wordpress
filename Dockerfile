@@ -22,6 +22,7 @@ RUN yum -y install system-logos openssl mailcap; \
 RUN yum -y install epel-release; \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
     yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; \
+    sed -i 's/^;error_log .*/error_log = \/dev\/stderr/1' /etc/php.ini; \
     yum clean all;
 
 # WordPress
