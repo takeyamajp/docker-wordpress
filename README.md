@@ -20,6 +20,9 @@
     ENV HTTPD_LOG_LEVEL warn  
     ENV HTTPD_PHP_ERROR_LOG true
     
+    ENV PHP_SMTP_SERVER postfix  
+    ENV PHP_SMTP_PORT 25
+    
     VOLUME /wordpress
     
     EXPOSE 80  
