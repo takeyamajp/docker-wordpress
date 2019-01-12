@@ -5,6 +5,7 @@ MAINTAINER "Hiroki Takeyama"
 RUN yum -y install system-logos openssl mailcap; \
     yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
     yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
+    sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/1' /etc/httpd/conf/httpd.conf; \
     sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/AllowOverride None/AllowOverride All/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\/wordpress">/1' /etc/httpd/conf/httpd.conf; \
@@ -13,7 +14,6 @@ RUN yum -y install system-logos openssl mailcap; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/1' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//1' /etc/httpd/conf.d/ssl.conf; \
-    echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf; \
     rm -f /etc/httpd/conf.modules.d/00-proxy.conf; \
     rm -f /usr/sbin/suexec; \
     yum clean all;
