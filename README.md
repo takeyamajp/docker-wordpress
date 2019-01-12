@@ -16,9 +16,9 @@
     ENV BASIC_AUTH_USER user  
     ENV BASIC_AUTH_PASSWORD user
     
-    ENV HTTPD_LOGGING true  
+    ENV HTTPD_LOG true  
     ENV HTTPD_LOG_LEVEL warn  
-    ENV HTTPD_PHP_ERROR_LOGGING true
+    ENV HTTPD_PHP_ERROR_LOG true
     
     VOLUME /wordpress
     
