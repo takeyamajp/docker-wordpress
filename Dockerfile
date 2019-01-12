@@ -38,8 +38,6 @@ RUN { \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
     echo 'sed -i "s/^;*\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/1" /etc/php.ini'; \
-    echo 'sed -i "s/^\(SMTP\) =.*/\1 =${PHP_SMTP_SERVER}/1" /etc/php.ini'; \
-    echo 'sed -i "s/^\(smtp_port\) =.*/\1 =${PHP_SMTP_PORT}/1" /etc/php.ini'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(CustomLog .*\)/#\1/1" /etc/httpd/conf/httpd.conf'; \
@@ -128,9 +126,6 @@ ENV BASIC_AUTH_PASSWORD user
 ENV HTTPD_LOG true
 ENV HTTPD_LOG_LEVEL warn
 ENV HTTPD_PHP_ERROR_LOG true
-
-ENV PHP_SMTP_SERVER postfix
-ENV PHP_SMTP_PORT 25
 
 VOLUME /wordpress
 
