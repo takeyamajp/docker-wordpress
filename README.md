@@ -10,7 +10,7 @@
     ENV TIMEZONE Asia/Tokyo
     
     ENV REQUIRE_SSL true  
-    ENV ENABLE_GZIP_COMPRESSION true
+    ENV GZIP_COMPRESSION true
     
     ENV REQUIRE_BASIC_AUTH false  
     ENV BASIC_AUTH_USER user  
