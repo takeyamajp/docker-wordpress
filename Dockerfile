@@ -97,7 +97,7 @@ RUN { \
     echo '  rm -f /etc/httpd/conf.d/basicAuth.conf'; \
     echo '  rm -f /wordpress/.htpasswd'; \
     echo 'fi'; \
-    echo 'if [ ${REQUIRE_BASIC_AUTH,,} = "true" ]; then'; \
+    echo 'if [ ${BASIC_AUTH,,} = "true" ]; then'; \
     echo '  {'; \
     echo '  echo "<Directory /wordpress/>"'; \
     echo '  echo "  AuthType Basic"'; \
@@ -119,7 +119,7 @@ ENV TIMEZONE Asia/Tokyo
 ENV REQUIRE_SSL true
 ENV GZIP_COMPRESSION true
 
-ENV REQUIRE_BASIC_AUTH false
+ENV BASIC_AUTH false
 ENV BASIC_AUTH_USER user
 ENV BASIC_AUTH_PASSWORD user
 
