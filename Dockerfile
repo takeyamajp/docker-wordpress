@@ -59,7 +59,7 @@ RUN { \
     echo 'fi'; \
     echo 'if [ -e /wordpress/.htaccess ]; then'; \
     echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
-    echo '  sed -i '\''/^# BEGIN ENABLE GZIP COMPRESSION$/,/^# END ENABLE GZIP COMPRESSION$/d'\'' /wordpress/.htaccess'; \
+    echo '  sed -i '\''/^# BEGIN GZIP COMPRESSION$/,/^# END GZIP COMPRESSION$/d'\'' /wordpress/.htaccess'; \
     echo 'fi'; \
     echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
     echo '  {'; \
@@ -77,16 +77,16 @@ RUN { \
     echo '  fi'; \
     echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
     echo 'fi'; \
-    echo 'if [ ${ENABLE_GZIP_COMPRESSION,,} = "true" ]; then'; \
+    echo 'if [ ${GZIP_COMPRESSION,,} = "true" ]; then'; \
     echo '  {'; \
-    echo '  echo "# BEGIN ENABLE GZIP COMPRESSION"'; \
+    echo '  echo "# BEGIN GZIP COMPRESSION"'; \
     echo '  echo "<IfModule mod_deflate.c>"'; \
     echo '  echo "<IfModule mod_filter.c>"'; \
     echo '  echo "  SetOutputFilter DEFLATE"'; \
     echo '  echo "  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary"'; \
     echo '  echo "</IfModule>"'; \
     echo '  echo "</IfModule>"'; \
-    echo '  echo "# END ENABLE GZIP COMPRESSION"'; \
+    echo '  echo "# END GZIP COMPRESSION"'; \
     echo '  } > /wordpress/htaccess'; \
     echo '  if [ -e /wordpress/.htaccess ]; then'; \
     echo '    cat /wordpress/.htaccess >> /wordpress/htaccess'; \
@@ -117,7 +117,7 @@ ENTRYPOINT ["entrypoint.sh"]
 ENV TIMEZONE Asia/Tokyo
 
 ENV REQUIRE_SSL true
-ENV ENABLE_GZIP_COMPRESSION true
+ENV GZIP_COMPRESSION true
 
 ENV REQUIRE_BASIC_AUTH false
 ENV BASIC_AUTH_USER user
