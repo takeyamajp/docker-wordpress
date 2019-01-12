@@ -12,7 +12,7 @@
     ENV REQUIRE_SSL true  
     ENV GZIP_COMPRESSION true
     
-    ENV REQUIRE_BASIC_AUTH false  
+    ENV BASIC_AUTH false  
     ENV BASIC_AUTH_USER user  
     ENV BASIC_AUTH_PASSWORD user
     
