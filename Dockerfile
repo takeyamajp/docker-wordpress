@@ -7,7 +7,7 @@ RUN yum -y install system-logos openssl mailcap; \
     yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/1' /etc/httpd/conf/httpd.conf; \
-    sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/AllowOverride None/AllowOverride All/1' /etc/httpd/conf/httpd.conf; \
+    sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/\(AllowOverride\) None/\1 All/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\/wordpress">/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/1' /etc/httpd/conf/httpd.conf; \
