@@ -14,8 +14,6 @@ RUN yum -y install system-logos openssl mailcap; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/1' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//1' /etc/httpd/conf.d/ssl.conf; \
-    sed -i 's/^\(LoadModule mpm_prefork_module .*\)/#\1/1' /etc/httpd/conf.modules.d/00-mpm.conf; \
-    sed -i 's/^#\(LoadModule mpm_event_module .*\)/\1/1' /etc/httpd/conf.modules.d/00-mpm.conf; \
     rm -f /etc/httpd/conf.modules.d/00-proxy.conf; \
     rm -f /usr/sbin/suexec; \
     yum clean all;
