@@ -38,7 +38,7 @@ RUN { \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
-    echo 'sed -i "s/^;*\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/1" /etc/php.ini'; \
+    echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/1" /etc/php.ini'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(CustomLog .*\)/#\1/1" /etc/httpd/conf/httpd.conf'; \
