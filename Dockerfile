@@ -5,16 +5,16 @@ MAINTAINER "Hiroki Takeyama"
 RUN yum -y install system-logos openssl mailcap; \
     yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
     yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
-    sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/1' /etc/httpd/conf/httpd.conf; \
-    sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/\(AllowOverride\) None/\1 All/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\/wordpress">/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf.d/ssl.conf; \
-    sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/1' /etc/httpd/conf.d/ssl.conf; \
-    sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//1' /etc/httpd/conf.d/ssl.conf; \
-    sed -i 's/^\(LoadModule http2_module .*\)/#\1/1' /etc/httpd/conf.modules.d/00-base.conf; \
+    sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/' /etc/httpd/conf/httpd.conf; \
+    sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/\(AllowOverride\) None/\1 All/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\/wordpress">/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf.d/ssl.conf; \
+    sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf.d/ssl.conf; \
+    sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//' /etc/httpd/conf.d/ssl.conf; \
+    sed -i 's/^\(LoadModule http2_module .*\)/#\1/' /etc/httpd/conf.modules.d/00-base.conf; \
     rm -f /etc/httpd/conf.modules.d/00-proxy.conf; \
     rm -f /usr/sbin/suexec; \
     yum clean all;
@@ -23,7 +23,7 @@ RUN yum -y install system-logos openssl mailcap; \
 RUN yum -y install epel-release; \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
     yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; \
-    sed -i 's/^;\(error_log\) .*/\1 = \/dev\/stderr/1' /etc/php.ini; \
+    sed -i 's/^;\(error_log\) .*/\1 = \/dev\/stderr/' /etc/php.ini; \
     yum clean all;
 
 # WordPress
@@ -38,22 +38,22 @@ RUN { \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
-    echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/1" /etc/php.ini'; \
-    echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf/httpd.conf'; \
-    echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf.d/ssl.conf'; \
-    echo 'sed -i "s/^\(CustomLog .*\)/#\1/1" /etc/httpd/conf/httpd.conf'; \
-    echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf/httpd.conf'; \
-    echo 'sed -i "s/^\(CustomLog .*\)/#\1/1" /etc/httpd/conf.d/ssl.conf'; \
-    echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/" /etc/php.ini'; \
+    echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf/httpd.conf'; \
+    echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(CustomLog .*\)/#\1/" /etc/httpd/conf/httpd.conf'; \
+    echo 'sed -i "s/^\(ErrorLog .*\)/#\1/" /etc/httpd/conf/httpd.conf'; \
+    echo 'sed -i "s/^\(CustomLog .*\)/#\1/" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(ErrorLog .*\)/#\1/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'if [ ${HTTPD_LOG,,} = "true" ]; then'; \
-    echo '  sed -i "s/^#\(CustomLog .*\)/\1/1" /etc/httpd/conf/httpd.conf'; \
-    echo '  sed -i "s/^#\(ErrorLog .*\)/\1/1" /etc/httpd/conf/httpd.conf'; \
-    echo '  sed -i "s/^#\(CustomLog .*\)/\1/1" /etc/httpd/conf.d/ssl.conf'; \
-    echo '  sed -i "s/^#\(ErrorLog .*\)/\1/1" /etc/httpd/conf.d/ssl.conf'; \
+    echo '  sed -i "s/^#\(CustomLog .*\)/\1/" /etc/httpd/conf/httpd.conf'; \
+    echo '  sed -i "s/^#\(ErrorLog .*\)/\1/" /etc/httpd/conf/httpd.conf'; \
+    echo '  sed -i "s/^#\(CustomLog .*\)/\1/" /etc/httpd/conf.d/ssl.conf'; \
+    echo '  sed -i "s/^#\(ErrorLog .*\)/\1/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'fi'; \
-    echo 'sed -i "s/^\(log_errors\) .*/\1 = Off/1" /etc/php.ini'; \
+    echo 'sed -i "s/^\(log_errors\) .*/\1 = Off/" /etc/php.ini'; \
     echo 'if [ ${HTTPD_PHP_ERROR_LOG,,} = "true" ]; then'; \
-    echo '  sed -i "s/^\(log_errors\) .*/\1 = On/1" /etc/php.ini'; \
+    echo '  sed -i "s/^\(log_errors\) .*/\1 = On/" /etc/php.ini'; \
     echo 'fi'; \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
