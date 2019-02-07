@@ -3,6 +3,9 @@ MAINTAINER "Hiroki Takeyama"
 
 # httpd (ius for CentOS7)
 RUN yum -y install system-logos openssl mailcap; \
+    openssl genrsa -aes128 -passout pass:dummy -out "/etc/pki/tls/private/localhost.pass.key" 2048; \
+    openssl rsa -passin pass:dummy -in "/etc/pki/tls/private/localhost.pass.key" -out "/etc/pki/tls/private/localhost.key"; \
+    rm -f "/etc/pki/tls/private/localhost.pass.key"; \
     yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
     yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
@@ -37,6 +40,8 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
+    echo 'openssl req -new -key "/etc/pki/tls/private/localhost.key" -subj "/CN=${HOSTNAME}" -out "/etc/pki/tls/certs/localhost.csr"'; \
+    echo 'openssl x509 -req -days 36500 -in "/etc/pki/tls/certs/localhost.csr" -signkey "/etc/pki/tls/private/localhost.key" -out "/etc/pki/tls/certs/localhost.crt" &>/dev/null'; \
     echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
     echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/" /etc/php.ini'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf/httpd.conf'; \
