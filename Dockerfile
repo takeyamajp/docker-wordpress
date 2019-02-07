@@ -3,11 +3,11 @@ MAINTAINER "Hiroki Takeyama"
 
 # httpd (ius for CentOS7)
 RUN yum -y install system-logos openssl mailcap; \
+    yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
+    yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
     openssl genrsa -aes128 -passout pass:dummy -out "/etc/pki/tls/private/localhost.pass.key" 2048; \
     openssl rsa -passin pass:dummy -in "/etc/pki/tls/private/localhost.pass.key" -out "/etc/pki/tls/private/localhost.key"; \
     rm -f "/etc/pki/tls/private/localhost.pass.key"; \
-    yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
-    yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/' /etc/httpd/conf/httpd.conf; \
     sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/\(AllowOverride\) None/\1 All/' /etc/httpd/conf/httpd.conf; \
