@@ -16,6 +16,7 @@
     ENV BASIC_AUTH_USER user  
     ENV BASIC_AUTH_PASSWORD user
     
+    ENV HTTPD_SERVER_ADMIN root@localhost  
     ENV HTTPD_LOG true  
     ENV HTTPD_LOG_LEVEL warn  
     ENV HTTPD_PHP_ERROR_LOG true
