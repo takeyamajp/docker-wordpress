@@ -44,6 +44,9 @@ RUN { \
     echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/" /etc/php.ini'; \
     echo 'openssl req -new -key "/etc/pki/tls/private/localhost.key" -subj "/CN=${HOSTNAME}" -out "/etc/pki/tls/certs/localhost.csr"'; \
     echo 'openssl x509 -req -days 36500 -in "/etc/pki/tls/certs/localhost.csr" -signkey "/etc/pki/tls/private/localhost.key" -out "/etc/pki/tls/certs/localhost.crt" &>/dev/null'; \
+    echo 'if [ -n "${HTTPD_SERVER_ADMIN}" ]; then'; \
+    echo 'sed -i "s/^\(ServerAdmin\) .*/\1 ${HTTPD_SERVER_ADMIN}/" /etc/httpd/conf/httpd.conf'; \
+    echo 'fi'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(CustomLog .*\)/#\1/" /etc/httpd/conf/httpd.conf'; \
@@ -129,6 +132,7 @@ ENV BASIC_AUTH false
 ENV BASIC_AUTH_USER user
 ENV BASIC_AUTH_PASSWORD user
 
+ENV HTTPD_SERVER_ADMIN root@localhost
 ENV HTTPD_LOG true
 ENV HTTPD_LOG_LEVEL warn
 ENV HTTPD_PHP_ERROR_LOG true
