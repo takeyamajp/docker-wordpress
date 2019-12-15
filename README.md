@@ -3,6 +3,9 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/takeyamajp/wordpress.svg)](https://hub.docker.com/r/takeyamajp/wordpress/)
 [![license](https://img.shields.io/github/license/takeyamajp/docker-wordpress.svg)](https://github.com/takeyamajp/docker-wordpress/blob/master/LICENSE)
 
+### Supported tags and respective Dockerfile links  
+- [`latest`, `centos7`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
+
     FROM centos:centos7  
     MAINTAINER "Hiroki Takeyama"
     
