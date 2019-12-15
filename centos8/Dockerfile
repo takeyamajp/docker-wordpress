@@ -12,9 +12,9 @@ RUN mkdir /cert; \
 # httpd
 RUN dnf -y install httpd mod_ssl; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\wordpress"/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/' /etc/httpd/conf/httpd.conf; \
     sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/\(AllowOverride\) None/\1 All/' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\wordpress">/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\/wordpress">/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf.d/ssl.conf; \
