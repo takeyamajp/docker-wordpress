@@ -4,7 +4,8 @@
 [![license](https://img.shields.io/github/license/takeyamajp/docker-wordpress.svg)](https://github.com/takeyamajp/docker-wordpress/blob/master/LICENSE)
 
 ### Supported tags and respective Dockerfile links  
-- [`latest`, `centos7`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
+- [`latest`, `centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile)
+- [`centos7`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
 
 ### Image summary
     FROM centos:centos7  
