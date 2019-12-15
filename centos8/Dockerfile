@@ -1,39 +1,73 @@
 FROM centos:centos8
 MAINTAINER "Hiroki Takeyama"
 
-# httpd (ius for CentOS7)
-RUN yum -y install system-logos openssl mailcap; \
-    yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
-    yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
-    openssl genrsa -aes128 -passout pass:dummy -out "/etc/pki/tls/private/localhost.pass.key" 2048; \
-    openssl rsa -passin pass:dummy -in "/etc/pki/tls/private/localhost.pass.key" -out "/etc/pki/tls/private/localhost.key"; \
-    rm -f "/etc/pki/tls/private/localhost.pass.key"; \
+# certificate
+RUN mkdir /cert; \
+    dnf -y install openssl; \
+    openssl genrsa -aes128 -passout pass:dummy -out "/cert/key.pass.pem" 2048; \
+    openssl rsa -passin pass:dummy -in "/cert/key.pass.pem" -out "/cert/key.pem"; \
+    rm -f /cert/key.pass.pem; \
+    dnf clean all;
+
+# httpd
+RUN dnf -y install httpd mod_ssl; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\wordpress"/' /etc/httpd/conf/httpd.conf; \
     sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/\(AllowOverride\) None/\1 All/' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\/wordpress">/' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\wordpress">/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//' /etc/httpd/conf.d/ssl.conf; \
-    sed -i 's/^\(LoadModule http2_module .*\)/#\1/' /etc/httpd/conf.modules.d/00-base.conf; \
-    rm -f /etc/httpd/conf.modules.d/00-proxy.conf; \
+    sed -i 's/^\(LoadModule lbmethod_heartbeat_module .*\)/#\1/' /etc/httpd/conf.modules.d/00-proxy.conf; \
     rm -f /usr/sbin/suexec; \
-    yum clean all;
+    dnf clean all;
 
-# PHP (remi for CentOS7)
-RUN yum -y install epel-release; \
-    rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
-    yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; \
+# PHP (remi for CentOS8)
+RUN mkdir /run/php-fpm; \
+    dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm; \
+    dnf -y install https://rpms.remirepo.net/enterprise/remi-release-8.rpm; \
+    dnf -y module enable php:remi-7.4; \
+    dnf -y install php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; \
     sed -i 's/^;\(error_log\) .*/\1 = \/dev\/stderr/' /etc/php.ini; \
-    yum clean all;
+    sed -i 's/^;\(listen.owner\) .*/\1 = apache/' /etc/php-fpm.d/www.conf; \
+    sed -i 's/^;\(listen.group\) .*/\1 = apache/' /etc/php-fpm.d/www.conf; \
+    sed -i 's/^\(listen.acl_users .*\)/;\1/' /etc/php-fpm.d/www.conf; \
+    dnf clean all;
 
 # WordPress
 RUN mkdir /wordpress; \
-    yum -y install --disablerepo=ius wget; \
+    dnf -y install wget; \
     wget https://wordpress.org/latest.tar.gz -P /usr/src; \
-    yum clean all;
+    dnf clean all;
+
+# supervisor
+RUN mkdir /run/supervisor; \
+    dnf -y install supervisor; \
+    sed -i 's/^\(nodaemon\)=false/\1=true/' /etc/supervisord.conf; \
+    sed -i 's/^;\(user\)=chrism/\1=root/' /etc/supervisord.conf; \
+    sed -i '/^\[unix_http_server\]$/a username=dummy\npassword=dummy' /etc/supervisord.conf; \
+    sed -i '/^\[supervisorctl\]$/a username=dummy\npassword=dummy' /etc/supervisord.conf; \
+    { \
+    echo '[program:httpd]'; \
+    echo 'command=/usr/sbin/httpd -DFOREGROUND'; \
+    echo 'priority=2'; \
+    echo 'stdout_logfile=/dev/fd/1'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/fd/2'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    } > /etc/supervisord.d/httpd.ini; \
+    { \
+    echo '[program:php-fpm]'; \
+    echo 'command=/usr/sbin/php-fpm --nodaemonize'; \
+    echo 'priority=1'; \
+    echo 'stdout_logfile=/dev/fd/1'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/fd/2'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    } > /etc/supervisord.d/php-fpm.ini; \
+    dnf clean all;
 
 # entrypoint
 RUN { \
@@ -42,8 +76,10 @@ RUN { \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
     echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/" /etc/php.ini'; \
-    echo 'openssl req -new -key "/etc/pki/tls/private/localhost.key" -subj "/CN=${HOSTNAME}" -out "/etc/pki/tls/certs/localhost.csr"'; \
-    echo 'openssl x509 -req -days 36500 -in "/etc/pki/tls/certs/localhost.csr" -signkey "/etc/pki/tls/private/localhost.key" -out "/etc/pki/tls/certs/localhost.crt" &>/dev/null'; \
+    echo 'openssl req -new -key "/cert/key.pem" -subj "/CN=${HOSTNAME}" -out "/cert/csr.pem"'; \
+    echo 'openssl x509 -req -days 36500 -in "/cert/csr.pem" -signkey "/cert/key.pem" -out "/cert/cert.pem" &>/dev/null'; \
+    echo 'sed -i "s/^\(SSLCertificateFile\) .*/\1 \/cert\/cert.pem/" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(SSLCertificateKeyFile\) .*/\1 \/cert\/key.pem/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'if [ -n "${HTTPD_SERVER_ADMIN}" ]; then'; \
     echo '  sed -i "s/^\(ServerAdmin\) .*/\1 ${HTTPD_SERVER_ADMIN}/" /etc/httpd/conf/httpd.conf'; \
     echo 'fi'; \
@@ -142,4 +178,4 @@ VOLUME /wordpress
 EXPOSE 80
 EXPOSE 443
 
-CMD ["httpd", "-DFOREGROUND"]
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
