@@ -6,6 +6,7 @@
 ### Supported tags and respective Dockerfile links  
 - [`latest`, `centos7`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
 
+### Image summary
     FROM centos:centos7  
     MAINTAINER "Hiroki Takeyama"
     
