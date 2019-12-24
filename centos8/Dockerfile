@@ -30,7 +30,6 @@ RUN mkdir /run/php-fpm; \
     dnf -y install https://rpms.remirepo.net/enterprise/remi-release-8.rpm; \
     dnf -y module enable php:remi-7.4; \
     dnf -y install php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; \
-    sed -i 's/^\(php_admin_value\[error_log\]\) = .*/\1 = \/dev\/stderr/' /etc/php-fpm.d/www.conf; \
     sed -i 's/^;\(listen.owner\) .*/\1 = apache/' /etc/php-fpm.d/www.conf; \
     sed -i 's/^;\(listen.group\) .*/\1 = apache/' /etc/php-fpm.d/www.conf; \
     sed -i 's/^\(listen.acl_users .*\)/;\1/' /etc/php-fpm.d/www.conf; \
