@@ -51,7 +51,7 @@ RUN mkdir /run/supervisor; \
     { \
     echo '[program:httpd]'; \
     echo 'command=/usr/sbin/httpd -DFOREGROUND'; \
-    echo 'priority=2'; \
+    echo 'priority=3'; \
     echo 'stdout_logfile=/dev/fd/1'; \
     echo 'stdout_logfile_maxbytes=0'; \
     echo 'stderr_logfile=/dev/fd/2'; \
@@ -60,12 +60,19 @@ RUN mkdir /run/supervisor; \
     { \
     echo '[program:php-fpm]'; \
     echo 'command=/usr/sbin/php-fpm --nodaemonize'; \
-    echo 'priority=1'; \
+    echo 'priority=2'; \
     echo 'stdout_logfile=/dev/fd/1'; \
     echo 'stdout_logfile_maxbytes=0'; \
     echo 'stderr_logfile=/dev/fd/2'; \
     echo 'stderr_logfile_maxbytes=0'; \
     } > /etc/supervisord.d/php-fpm.ini; \
+    { \
+    echo '[program:tail]'; \
+    echo 'command=/usr/bin/tail -F /var/log/php-fpm/www-error.log'; \
+    echo 'priority=1'; \
+    echo 'stdout_logfile=/dev/fd/1'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    } > /etc/supervisord.d/tail.ini; \
     dnf clean all;
 
 # entrypoint
@@ -75,6 +82,8 @@ RUN { \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
     echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/" /etc/php.ini'; \
+    echo 'rm -f /var/log/php-fpm/www-error.log'; \
+    echo 'touch /var/log/php-fpm/www-error.log'; \
     echo 'openssl req -new -sha384 -key "/cert/key.pem" -subj "/CN=${HOSTNAME}" -out "/cert/csr.pem"'; \
     echo 'openssl x509 -req -days 36500 -in "/cert/csr.pem" -signkey "/cert/key.pem" -out "/cert/cert.pem" &>/dev/null'; \
     echo 'sed -i "s/^\(SSLCertificateFile\) .*/\1 \/cert\/cert.pem/" /etc/httpd/conf.d/ssl.conf'; \
