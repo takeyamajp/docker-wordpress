@@ -30,7 +30,7 @@ RUN mkdir /run/php-fpm; \
     dnf -y install https://rpms.remirepo.net/enterprise/remi-release-8.rpm; \
     dnf -y module enable php:remi-7.4; \
     dnf -y install php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu; \
-    sed -i 's/^;\(error_log\) .*/\1 = \/dev\/stderr/' /etc/php.ini; \
+    sed -i 's/^\(php_admin_value\[error_log\]\) = .*/\1 = \/dev\/stderr/' /etc/php-fpm.d/www.conf; \
     sed -i 's/^;\(listen.owner\) .*/\1 = apache/' /etc/php-fpm.d/www.conf; \
     sed -i 's/^;\(listen.group\) .*/\1 = apache/' /etc/php-fpm.d/www.conf; \
     sed -i 's/^\(listen.acl_users .*\)/;\1/' /etc/php-fpm.d/www.conf; \
@@ -95,9 +95,9 @@ RUN { \
     echo '  sed -i "s/^#\(CustomLog .*\)/\1/" /etc/httpd/conf.d/ssl.conf'; \
     echo '  sed -i "s/^#\(ErrorLog .*\)/\1/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'fi'; \
-    echo 'sed -i "s/^\(log_errors\) .*/\1 = Off/" /etc/php.ini'; \
+    echo 'sed -i "s/^\(php_admin_flag\[log_errors\]\) = .*/\1 = off/" /etc/php-fpm.d/www.conf'; \
     echo 'if [ ${HTTPD_PHP_ERROR_LOG,,} = "true" ]; then'; \
-    echo '  sed -i "s/^\(log_errors\) .*/\1 = On/" /etc/php.ini'; \
+    echo '  sed -i "s/^\(php_admin_flag\[log_errors\]\) = .*/\1 = on/" /etc/php-fpm.d/www.conf'; \
     echo 'fi'; \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
