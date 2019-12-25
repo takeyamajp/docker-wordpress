@@ -123,14 +123,14 @@ RUN { \
     echo '  sed -i "s/^\(define( *'\''LOGGED_IN_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[6]}\2/" /wordpress/wp-config.php'; \
     echo '  sed -i "s/^\(define( *'\''NONCE_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[7]}\2/" /wordpress/wp-config.php'; \
     echo 'fi'; \
-    echo 'sed -i "s/^\(define( *'\''DB_NAME'\'', *'\''\).*\('\'' *);\)/\1${WP_DB_NAME}\2/" /wordpress/wp-config.php'; \
-    echo 'sed -i "s/^\(define( *'\''DB_USER'\'', *'\''\).*\('\'' *);\)/\1${WP_DB_USER}\2/" /wordpress/wp-config.php'; \
-    echo 'sed -i "s/^\(define( *'\''DB_PASSWORD'\'', *'\''\).*\('\'' *);\)/\1${WP_DB_PASSWORD}\2/" /wordpress/wp-config.php'; \
-    echo 'sed -i "s/^\(define( *'\''DB_HOST'\'', *'\''\).*\('\'' *);\)/\1${WP_DB_HOST}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_NAME'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_NAME}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_USER'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_USER}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_PASSWORD'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_PASSWORD}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_HOST'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_HOST}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_CHARSET'\'', *'\''\).*\('\'' *);\)/\1utf8mb4\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_COLLATE'\'', *'\''\).*\('\'' *);\)/\1\2/" /wordpress/wp-config.php'; \
-    echo 'sed -i "s/^\(\$table_prefix = '\''\).*\('\'';\)/\1${WP_DB_TABLE_PREFIX}\2/" /wordpress/wp-config.php'; \
-    echo 'sed -i "s/^\(define( *'\''WP_DEBUG'\'', *\).*\( *);\)/\1${WP_DEBUG}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(\$table_prefix = '\''\).*\('\'';\)/\1${WORDPRESS_DB_TABLE_PREFIX}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''WP_DEBUG'\'', *\).*\( *);\)/\1${WORDPRESS_DEBUG}\2/" /wordpress/wp-config.php'; \
     echo 'if [ -e /wordpress/.htaccess ]; then'; \
     echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
     echo '  sed -i '\''/^# BEGIN GZIP COMPRESSION$/,/^# END GZIP COMPRESSION$/d'\'' /wordpress/.htaccess'; \
@@ -202,12 +202,12 @@ ENV HTTPD_LOG true
 ENV HTTPD_LOG_LEVEL warn
 ENV HTTPD_PHP_ERROR_LOG true
 
-ENV WP_DB_NAME db
-ENV WP_DB_USER root
-ENV WP_DB_PASSWORD root
-ENV WP_DB_HOST mysql
-ENV WP_DB_TABLE_PREFIX wp_
-ENV WP_DEBUG false
+ENV WORDPRESS_DB_NAME db
+ENV WORDPRESS_DB_USER root
+ENV WORDPRESS_DB_PASSWORD root
+ENV WORDPRESS_DB_HOST mysql
+ENV WORDPRESS_DB_TABLE_PREFIX wp_
+ENV WORDPRESS_DEBUG false
 
 VOLUME /wordpress
 
