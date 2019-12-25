@@ -25,6 +25,13 @@
     ENV HTTPD_LOG_LEVEL warn  
     ENV HTTPD_PHP_ERROR_LOG true
     
+    ENV WORDPRESS_DB_NAME db  
+    ENV WORDPRESS_DB_USER root  
+    ENV WORDPRESS_DB_PASSWORD root  
+    ENV WORDPRESS_DB_HOST mysql  
+    ENV WORDPRESS_TABLE_PREFIX wp_  
+    ENV WORDPRESS_DEBUG false
+    
     VOLUME /wordpress
     
     EXPOSE 80  
