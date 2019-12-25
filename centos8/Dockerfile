@@ -129,7 +129,7 @@ RUN { \
     echo 'sed -i "s/^\(define( *'\''DB_HOST'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_HOST}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_CHARSET'\'', *'\''\).*\('\'' *);\)/\1utf8mb4\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_COLLATE'\'', *'\''\).*\('\'' *);\)/\1\2/" /wordpress/wp-config.php'; \
-    echo 'sed -i "s/^\(\$table_prefix = '\''\).*\('\'';\)/\1${WORDPRESS_DB_TABLE_PREFIX}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(\$table_prefix = '\''\).*\('\'';\)/\1${WORDPRESS_TABLE_PREFIX}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''WP_DEBUG'\'', *\).*\( *);\)/\1${WORDPRESS_DEBUG}\2/" /wordpress/wp-config.php'; \
     echo 'if [ -e /wordpress/.htaccess ]; then'; \
     echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
@@ -206,7 +206,7 @@ ENV WORDPRESS_DB_NAME db
 ENV WORDPRESS_DB_USER root
 ENV WORDPRESS_DB_PASSWORD root
 ENV WORDPRESS_DB_HOST mysql
-ENV WORDPRESS_DB_TABLE_PREFIX wp_
+ENV WORDPRESS_TABLE_PREFIX wp_
 ENV WORDPRESS_DEBUG false
 
 VOLUME /wordpress
