@@ -112,7 +112,7 @@ RUN { \
     echo 'fi'; \
     echo 'if [ ! -e /wordpress/wp-config.php ]; then'; \
     echo '  cp /wordpress/wp-config-sample.php /wordpress/wp-config.php'; \
-    echo '  chars='\''abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^*()-_[]{}<>~`+=,.;:?|'\'';'; \
+    echo '  chars='\''abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^*()-_ []{}<>~`+=,.;:?|'\'';'; \
     echo '  for i in $(seq 8); do for j in $(seq 64); do keys[$(($i - 1))]+=${chars:$(($RANDOM % ${#chars})):1}; done; done;'; \
     echo '  sed -i "s/^\(define( *'\''AUTH_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[0]}\2/" /wordpress/wp-config.php'; \
     echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[1]}\2/" /wordpress/wp-config.php'; \
