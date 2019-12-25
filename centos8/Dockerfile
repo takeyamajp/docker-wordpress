@@ -112,16 +112,16 @@ RUN { \
     echo 'fi'; \
     echo 'if [ ! -e /wordpress/wp-config.php ]; then'; \
     echo '  cp /wordpress/wp-config-sample.php /wordpress/wp-config.php'; \
-    echo '  chars='\''abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^*()-_ []{}<>~`+=,.;:?|'\'';'; \
-    echo '  for i in $(seq 8); do for j in $(seq 64); do keys[$(($i - 1))]+=${chars:$(($RANDOM % ${#chars})):1}; done; done;'; \
-    echo '  sed -i "s/^\(define( *'\''AUTH_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[0]}\2/" /wordpress/wp-config.php'; \
-    echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[1]}\2/" /wordpress/wp-config.php'; \
-    echo '  sed -i "s/^\(define( *'\''LOGGED_IN_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[2]}\2/" /wordpress/wp-config.php'; \
-    echo '  sed -i "s/^\(define( *'\''NONCE_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[3]}\2/" /wordpress/wp-config.php'; \
-    echo '  sed -i "s/^\(define( *'\''AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[4]}\2/" /wordpress/wp-config.php'; \
-    echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[5]}}\2/" /wordpress/wp-config.php'; \
-    echo '  sed -i "s/^\(define( *'\''LOGGED_IN_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[6]}\2/" /wordpress/wp-config.php'; \
-    echo '  sed -i "s/^\(define( *'\''NONCE_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[7]}\2/" /wordpress/wp-config.php'; \
+    echo '  CHARS='\''abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^*()-_ []{}<>~`+=,.;:?|'\'';'; \
+    echo '  for i in $(seq 8); do for j in $(seq 64); do KEYS[$(($i - 1))]+=${CHARS:$(($RANDOM % ${#CHARS})):1}; done; done;'; \
+    echo '  sed -i "s/^\(define( *'\''AUTH_KEY'\'', *'\''\).*\('\'' *);\)/\1${KEYS[0]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_KEY'\'', *'\''\).*\('\'' *);\)/\1${KEYS[1]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''LOGGED_IN_KEY'\'', *'\''\).*\('\'' *);\)/\1${KEYS[2]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''NONCE_KEY'\'', *'\''\).*\('\'' *);\)/\1${KEYS[3]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[4]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[5]}}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''LOGGED_IN_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[6]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''NONCE_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[7]}\2/" /wordpress/wp-config.php'; \
     echo 'fi'; \
     echo 'sed -i "s/^\(define( *'\''DB_NAME'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_NAME}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_USER'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_USER}\2/" /wordpress/wp-config.php'; \
