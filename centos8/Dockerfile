@@ -110,6 +110,27 @@ RUN { \
     echo 'if [ -z "$(ls /wordpress)" ]; then'; \
     echo '  tar -xzf /usr/src/latest.tar.gz -C /'; \
     echo 'fi'; \
+    echo 'if [ ! -e /wordpress/wp-config.php ]; then'; \
+    echo '  cp /wordpress/wp-config-sample.php /wordpress/wp-config.php'; \
+    echo '  chars='\''abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^*()-_[]{}<>~`+=,.;:?|'\'';'; \
+    echo '  for i in $(seq 8); do for j in $(seq 64); do keys[$(($i - 1))]+=${chars:$(($RANDOM % ${#chars})):1}; done; done;'; \
+    echo '  sed -i "s/^\(define( *'\''AUTH_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[0]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[1]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''LOGGED_IN_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[2]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''NONCE_KEY'\'', *'\''\).*\('\'' *);\)/\1${keys[3]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[4]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[5]}}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''LOGGED_IN_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[6]}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''NONCE_SALT'\'', *'\''\).*\('\'' *);\)/\1${keys[7]}\2/" /wordpress/wp-config.php'; \
+    echo 'fi'; \
+    echo 'sed -i "s/^\(define( *'\''DB_NAME'\'', *'\''\).*\('\'' *);\)/\1${WP_DB_NAME}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_USER'\'', *'\''\).*\('\'' *);\)/\1${WP_DB_USER}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_PASSWORD'\'', *'\''\).*\('\'' *);\)/\1${WP_DB_PASSWORD}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_HOST'\'', *'\''\).*\('\'' *);\)/\1${WP_DB_HOST}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_CHARSET'\'', *'\''\).*\('\'' *);\)/\1utf8mb4\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''DB_COLLATE'\'', *'\''\).*\('\'' *);\)/\1\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(\$table_prefix = '\''\).*\('\'';\)/\1${WP_DB_TABLE_PREFIX}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''WP_DEBUG'\'', *\).*\( *);\)/\1${WP_DEBUG}\2/" /wordpress/wp-config.php'; \
     echo 'if [ -e /wordpress/.htaccess ]; then'; \
     echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
     echo '  sed -i '\''/^# BEGIN GZIP COMPRESSION$/,/^# END GZIP COMPRESSION$/d'\'' /wordpress/.htaccess'; \
@@ -180,6 +201,13 @@ ENV HTTPD_SERVER_ADMIN root@localhost
 ENV HTTPD_LOG true
 ENV HTTPD_LOG_LEVEL warn
 ENV HTTPD_PHP_ERROR_LOG true
+
+ENV WP_DB_NAME db
+ENV WP_DB_USER root
+ENV WP_DB_PASSWORD root
+ENV WP_DB_HOST mysql
+ENV WP_DB_TABLE_PREFIX wp_
+ENV WP_DEBUG false
 
 VOLUME /wordpress
 
