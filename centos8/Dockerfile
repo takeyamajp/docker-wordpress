@@ -119,7 +119,7 @@ RUN { \
     echo '  sed -i "s/^\(define( *'\''LOGGED_IN_KEY'\'', *'\''\).*\('\'' *);\)/\1${KEYS[2]}\2/" /wordpress/wp-config.php'; \
     echo '  sed -i "s/^\(define( *'\''NONCE_KEY'\'', *'\''\).*\('\'' *);\)/\1${KEYS[3]}\2/" /wordpress/wp-config.php'; \
     echo '  sed -i "s/^\(define( *'\''AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[4]}\2/" /wordpress/wp-config.php'; \
-    echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[5]}}\2/" /wordpress/wp-config.php'; \
+    echo '  sed -i "s/^\(define( *'\''SECURE_AUTH_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[5]}\2/" /wordpress/wp-config.php'; \
     echo '  sed -i "s/^\(define( *'\''LOGGED_IN_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[6]}\2/" /wordpress/wp-config.php'; \
     echo '  sed -i "s/^\(define( *'\''NONCE_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[7]}\2/" /wordpress/wp-config.php'; \
     echo 'fi'; \
