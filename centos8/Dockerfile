@@ -135,7 +135,7 @@ RUN { \
     echo 'ARRAY_PARAM=(`echo ${WORDPRESS_CONFIG_EXTRA_PARAM} | tr "," " "`)'; \
     echo 'ARRAY_VALUE=(`echo ${WORDPRESS_CONFIG_EXTRA_VALUE} | tr "," " "`)'; \
     echo 'if [ ${#ARRAY_PARAM[@]} -gt 0 -a ${#ARRAY_VALUE[@]} -gt 0 -a ${#ARRAY_PARAM[@]} -eq ${#ARRAY_VALUE[@]} ]; then'; \
-    echo '. sed -i '\''/^<?php\r*$/a \/\/ BEGIN CONFIG EXTRA\n\/\/ END CONFIG EXTRA'\'' /wordpress/wp-config.php'; \
+    echo '  sed -i '\''/^<?php\r*$/a \/\/ BEGIN CONFIG EXTRA\n\/\/ END CONFIG EXTRA'\'' /wordpress/wp-config.php'; \
     echo '  INDEX=0'; \
     echo '  for e in ${ARRAY_PARAM[@]}; do'; \
     echo '    sed -i "/^\/\/ END CONFIG EXTRA\r*$/i define('\''${ARRAY_PARAM[${INDEX}]}'\'', ${ARRAY_VALUE[${INDEX}]});" /wordpress/wp-config.php'; \
