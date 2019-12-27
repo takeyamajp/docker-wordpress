@@ -18,7 +18,7 @@
     
     ENV BASIC_AUTH false  
     ENV BASIC_AUTH_USER user  
-    ENV BASIC_AUTH_PASSWORD user
+    ENV BASIC_AUTH_PASSWORD password
     
     ENV HTTPD_SERVER_ADMIN root@localhost  
     ENV HTTPD_LOG true  
