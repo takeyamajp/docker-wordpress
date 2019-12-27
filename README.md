@@ -31,7 +31,7 @@
     ENV WORDPRESS_DB_HOST mysql  
     ENV WORDPRESS_TABLE_PREFIX wp_  
     ENV WORDPRESS_DEBUG false  
-    ENV WORDPRESS_CONFIG_EXTRA_PARAM string_param,boolean_param  
+    ENV WORDPRESS_CONFIG_EXTRA param1,param2  
     ENV WORDPRESS_CONFIG_EXTRA_VALUE \'string\',true
     
     VOLUME /wordpress
