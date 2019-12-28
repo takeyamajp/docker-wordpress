@@ -1,13 +1,18 @@
 FROM centos:centos7
 MAINTAINER "Hiroki Takeyama"
 
+# certificate
+RUN mkdir /cert; \
+    yum -y install openssl; \
+    openssl genrsa -aes256 -passout pass:dummy -out "/cert/key.pass.pem" 2048; \
+    openssl rsa -passin pass:dummy -in "/cert/key.pass.pem" -out "/cert/key.pem"; \
+    rm -f /cert/key.pass.pem; \
+    yum clean all;
+
 # httpd (ius for CentOS7)
-RUN yum -y install system-logos openssl mailcap; \
+RUN yum -y install system-logos mailcap; \
     yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
     yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
-    openssl genrsa -aes256 -passout pass:dummy -out "/etc/pki/tls/private/localhost.pass.key" 2048; \
-    openssl rsa -passin pass:dummy -in "/etc/pki/tls/private/localhost.pass.key" -out "/etc/pki/tls/private/localhost.key"; \
-    rm -f "/etc/pki/tls/private/localhost.pass.key"; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/' /etc/httpd/conf/httpd.conf; \
     sed -i '/^<Directory "\/var\/www\/html">$/,/^<IfModule dir_module>$/ s/\(AllowOverride\) None/\1 All/' /etc/httpd/conf/httpd.conf; \
@@ -42,8 +47,10 @@ RUN { \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'ESC_TIMEZONE=`echo ${TIMEZONE} | sed "s/\//\\\\\\\\\//g"`'; \
     echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/" /etc/php.ini'; \
-    echo 'openssl req -new -sha384 -key "/etc/pki/tls/private/localhost.key" -subj "/CN=${HOSTNAME}" -out "/etc/pki/tls/certs/localhost.csr"'; \
-    echo 'openssl x509 -req -days 36500 -in "/etc/pki/tls/certs/localhost.csr" -signkey "/etc/pki/tls/private/localhost.key" -out "/etc/pki/tls/certs/localhost.crt" &>/dev/null'; \
+    echo 'openssl req -new -sha384 -key "/cert/key.pem" -subj "/CN=${HOSTNAME}" -out "/cert/csr.pem"'; \
+    echo 'openssl x509 -req -days 36500 -in "/cert/csr.pem" -signkey "/cert/key.pem" -out "/cert/cert.pem" &>/dev/null'; \
+    echo 'sed -i "s/^\(SSLCertificateFile\) .*/\1 \/cert\/cert.pem/" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(SSLCertificateKeyFile\) .*/\1 \/cert\/key.pem/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'if [ -n "${HTTPD_SERVER_ADMIN}" ]; then'; \
     echo '  sed -i "s/^\(ServerAdmin\) .*/\1 ${HTTPD_SERVER_ADMIN}/" /etc/httpd/conf/httpd.conf'; \
     echo 'fi'; \
