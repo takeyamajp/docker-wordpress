@@ -6,7 +6,6 @@
 ### Supported tags and respective Dockerfile links  
 - [`latest`, `centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile)
 - [`centos7`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
-- [`5.3.2`](https://github.com/takeyamajp/docker-wordpress/blob/master/5.3.2/Dockerfile)
 
 ### Image summary
     FROM centos:centos8  
