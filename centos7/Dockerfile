@@ -92,7 +92,7 @@ RUN { \
     echo 'sed -i "s/^\(define( *'\''DB_CHARSET'\'', *'\''\).*\('\'' *);\)/\1utf8mb4\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_COLLATE'\'', *'\''\).*\('\'' *);\)/\1\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(\$table_prefix = '\''\).*\('\'';\)/\1${WORDPRESS_TABLE_PREFIX}\2/" /wordpress/wp-config.php'; \
-    echo 'sed -i "s/^\(define( *'\''WP_DEBUG'\'', *\).*\( *);\)/\1${WORDPRESS_DEBUG}\2/" /wordpress/wp-config.php'; \
+    echo 'sed -i "s/^\(define( *'\''WP_DEBUG'\'', *\)\S*\( *);\)/\1${WORDPRESS_DEBUG}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i '\''/^\/\/ BEGIN CONFIG EXTRA\r*$/,/^\/\/ END CONFIG EXTRA\r*$/d'\'' /wordpress/wp-config.php'; \
     echo 'ARRAY_PARAM=(`echo ${WORDPRESS_CONFIG_EXTRA} | tr "," " "`)'; \
     echo 'ARRAY_VALUE=(`echo ${WORDPRESS_CONFIG_EXTRA_VALUE} | tr "," " "`)'; \
