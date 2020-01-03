@@ -85,10 +85,10 @@ RUN { \
     echo '  sed -i "s/^\(define( *'\''LOGGED_IN_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[6]}\2/" /wordpress/wp-config.php'; \
     echo '  sed -i "s/^\(define( *'\''NONCE_SALT'\'', *'\''\).*\('\'' *);\)/\1${KEYS[7]}\2/" /wordpress/wp-config.php'; \
     echo 'fi'; \
+    echo 'sed -i "s/^\(define( *'\''DB_HOST'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_HOST}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_NAME'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_NAME}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_USER'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_USER}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_PASSWORD'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_PASSWORD}\2/" /wordpress/wp-config.php'; \
-    echo 'sed -i "s/^\(define( *'\''DB_HOST'\'', *'\''\).*\('\'' *);\)/\1${WORDPRESS_DB_HOST}\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_CHARSET'\'', *'\''\).*\('\'' *);\)/\1utf8mb4\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(define( *'\''DB_COLLATE'\'', *'\''\).*\('\'' *);\)/\1\2/" /wordpress/wp-config.php'; \
     echo 'sed -i "s/^\(\$table_prefix = '\''\).*\('\'';\)/\1${WORDPRESS_TABLE_PREFIX}\2/" /wordpress/wp-config.php'; \
@@ -174,10 +174,10 @@ ENV HTTPD_LOG true
 ENV HTTPD_LOG_LEVEL warn
 ENV HTTPD_PHP_ERROR_LOG true
 
+ENV WORDPRESS_DB_HOST mysql
 ENV WORDPRESS_DB_NAME db
 ENV WORDPRESS_DB_USER user
 ENV WORDPRESS_DB_PASSWORD password
-ENV WORDPRESS_DB_HOST mysql
 ENV WORDPRESS_TABLE_PREFIX wp_
 ENV WORDPRESS_DEBUG false
 ENV WORDPRESS_CONFIG_EXTRA param1,param2
