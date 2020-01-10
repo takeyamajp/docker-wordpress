@@ -141,56 +141,52 @@ RUN { \
     echo '    ((INDEX+=1))'; \
     echo '  done'; \
     echo 'fi'; \
-    echo 'if [ -e /wordpress/.htaccess ]; then'; \
-    echo '  sed -i '\''/^# BEGIN REQUIRE SSL$/,/^# END REQUIRE SSL$/d'\'' /wordpress/.htaccess'; \
-    echo '  sed -i '\''/^# BEGIN GZIP COMPRESSION$/,/^# END GZIP COMPRESSION$/d'\'' /wordpress/.htaccess'; \
+    echo 'if [ -e /etc/httpd/conf.d/requireSsl.conf ]; then'; \
+    echo '  rm -f /etc/httpd/conf.d/requireSsl.conf'; \
     echo 'fi'; \
     echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
     echo '  {'; \
-    echo '  echo "# BEGIN REQUIRE SSL"'; \
     echo '  echo "<IfModule mod_rewrite.c>"'; \
     echo '  echo "  RewriteEngine On"'; \
     echo '  echo "  RewriteCond %{HTTPS} off"'; \
     echo '  echo "  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]"'; \
     echo '  echo "  RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]"'; \
     echo '  echo "</IfModule>"'; \
-    echo '  echo "# END REQUIRE SSL"'; \
-    echo '  } > /wordpress/htaccess'; \
-    echo '  if [ -e /wordpress/.htaccess ]; then'; \
-    echo '    cat /wordpress/.htaccess >> /wordpress/htaccess'; \
-    echo '  fi'; \
-    echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
+    echo '  } > /etc/httpd/conf.d/requireSsl.conf'; \
+    echo 'fi'; \
+    echo 'if [ -e /etc/httpd/conf.d/gzipCompression.conf ]; then'; \
+    echo '  rm -f /etc/httpd/conf.d/gzipCompression.conf'; \
     echo 'fi'; \
     echo 'if [ ${GZIP_COMPRESSION,,} = "true" ]; then'; \
     echo '  {'; \
-    echo '  echo "# BEGIN GZIP COMPRESSION"'; \
     echo '  echo "<IfModule mod_deflate.c>"'; \
     echo '  echo "<IfModule mod_filter.c>"'; \
     echo '  echo "  SetOutputFilter DEFLATE"'; \
     echo '  echo "  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary"'; \
     echo '  echo "</IfModule>"'; \
     echo '  echo "</IfModule>"'; \
-    echo '  echo "# END GZIP COMPRESSION"'; \
-    echo '  } > /wordpress/htaccess'; \
-    echo '  if [ -e /wordpress/.htaccess ]; then'; \
-    echo '    cat /wordpress/.htaccess >> /wordpress/htaccess'; \
-    echo '  fi'; \
-    echo '  mv -f /wordpress/htaccess /wordpress/.htaccess'; \
+    echo '  } > /etc/httpd/conf.d/gzipCompression.conf'; \
     echo 'fi'; \
-    echo 'if [ -e /wordpress/.htpasswd ]; then'; \
+    echo 'if [ -e /etc/httpd/conf.d/basicAuth.conf ]; then'; \
     echo '  rm -f /etc/httpd/conf.d/basicAuth.conf'; \
-    echo '  rm -f /wordpress/.htpasswd'; \
+    echo '  rm -f /etc/httpd/conf.d/.htpasswd'; \
     echo 'fi'; \
     echo 'if [ ${BASIC_AUTH,,} = "true" ]; then'; \
     echo '  {'; \
     echo '  echo "<Directory /wordpress/>"'; \
+    echo '  if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
+    echo '    echo "<If \"%{HTTPS} = '\''on'\''\">"'; \
+    echo '  fi'; \
     echo '  echo "  AuthType Basic"'; \
     echo '  echo "  AuthName '\''Basic Authentication'\''"'; \
-    echo '  echo "  AuthUserFile /wordpress/.htpasswd"'; \
+    echo '  echo "  AuthUserFile /etc/httpd/conf.d/.htpasswd"'; \
     echo '  echo "  Require valid-user"'; \
+    echo '  if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
+    echo '    echo "</If>"'; \
+    echo '  fi'; \
     echo '  echo "</Directory>"'; \
     echo '  } > /etc/httpd/conf.d/basicAuth.conf'; \
-    echo '  htpasswd -bmc /wordpress/.htpasswd ${BASIC_AUTH_USER} ${BASIC_AUTH_PASSWORD} &>/dev/null'; \
+    echo '  htpasswd -bmc /etc/httpd/conf.d/.htpasswd ${BASIC_AUTH_USER} ${BASIC_AUTH_PASSWORD} &>/dev/null'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /wordpress'; \
     echo 'exec "$@"'; \
