@@ -3,11 +3,11 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/takeyamajp/wordpress.svg)](https://hub.docker.com/r/takeyamajp/wordpress/)
 [![license](https://img.shields.io/github/license/takeyamajp/docker-wordpress.svg)](https://github.com/takeyamajp/docker-wordpress/blob/master/LICENSE)
 
-### Supported tags and respective Dockerfile links  
+## Supported tags and respective Dockerfile links  
 - [`latest`, `centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile)
 - [`centos7`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
 
-### Image summary
+## Image summary
     FROM centos:centos8  
     MAINTAINER "Hiroki Takeyama"
     
@@ -38,3 +38,23 @@
     
     EXPOSE 80  
     EXPOSE 443
+
+## How to use
+This container is supposed to be used as a backend of a reverse proxy server.  
+However, it can be simply used without the reverse proxy server.
+
+Example `docker-compose.yml`:
+
+    version: '3.1'  
+    services:  
+      wordpress:  
+        image: takeyamajp/wordpress  
+        ports:  
+          - 8080: 80  
+        environment:  
+          REQUIRE_SSL: false  
+      mysql:  
+        image: takeyamajp/mysql  
+
+Run `docker-compose up -d`, wait for it to initialize completely.  
+Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browser.
