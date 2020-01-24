@@ -58,3 +58,20 @@ Example `docker-compose.yml`:
 
 Run `docker-compose up -d`, wait for it to initialize completely.  
 Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browser.
+
+## Time zone
+You can use any time zone such as America/Chicago that can be used in CentOS.  
+
+See below for zones.  
+https://www.unicode.org/cldr/charts/latest/verify/zones/en.html
+
+## Require SSL
+If `REQUIRE_SSL` is true, the URL will be redirected automatically from HTTP to HTTPS protocol.
+
+## GZIP Compression
+The `GZIP_COMPRESSION` option will save bandwidth and increase browsing speed.  
+Normally, It is not necessary to be changed.
+
+## Basic Authentication
+Set `BASIC_AUTH` true if you want to use Basic Authentication.  
+When RequireSSL is true, it will be used after the protocol is redirected to HTTPS.
