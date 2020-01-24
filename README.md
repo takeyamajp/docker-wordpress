@@ -57,7 +57,7 @@ Example `docker-compose.yml`:
         image: takeyamajp/mysql  
 
 Run `docker-compose up -d`, wait for it to initialize completely.  
-Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browser.
+Then, access it via `http://localhost:8080` or `http://host-ip:8080` in your browser.
 
 ## Time zone
 You can use any time zone such as America/Chicago that can be used in CentOS.  
