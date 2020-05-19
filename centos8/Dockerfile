@@ -1,10 +1,6 @@
 FROM centos:centos8
 MAINTAINER "Hiroki Takeyama"
 
-# for Docker Hub
-RUN sed -i 's/^\(mirrorlist=\)/#\1/' /etc/yum.repos.d/CentOS-AppStream.repo; \
-    sed -i 's/^#\(baseurl=\)/\1/' /etc/yum.repos.d/CentOS-AppStream.repo;
-
 # certificate
 RUN mkdir /cert; \
     dnf -y install openssl; \
