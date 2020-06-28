@@ -56,7 +56,7 @@ Example `docker-compose.yml`:
       mysql:  
         image: takeyamajp/mysql  
 
-Run `docker-compose up -d`, wait for it to initialize completely.  
+Run `docker-compose up -d`, wait for it to initialize completely. (It takes several minutes.)
 Then, access it via `http://localhost:8080` or `http://host-ip:8080` in your browser.
 
 ## Time zone
