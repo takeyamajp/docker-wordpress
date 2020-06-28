@@ -11,7 +11,7 @@ RUN mkdir /cert; \
 
 # httpd (ius for CentOS7)
 RUN yum -y install system-logos mailcap; \
-    yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; \
+    yum -y install "https://repo.ius.io/ius-release-el7.rpm"; \
     yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/\(DocumentRoot\) "\/var\/www\/html"/\1 "\/wordpress"/' /etc/httpd/conf/httpd.conf; \
@@ -30,7 +30,7 @@ RUN yum -y install system-logos mailcap; \
 # PHP (remi for CentOS7)
 RUN yum -y install epel-release; \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
-    yum -y install --disablerepo=ius --enablerepo=remi,remi-php72 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu php-pecl-imagick php-pecl-zip; \
+    yum -y install --disablerepo=ius --enablerepo=remi,remi-php74 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu php-pecl-imagick php-pecl-zip; \
     sed -i 's/^;\(error_log\) .*/\1 = \/dev\/stderr/' /etc/php.ini; \
     yum clean all;
 
