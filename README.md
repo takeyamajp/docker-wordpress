@@ -50,9 +50,9 @@ Example `docker-compose.yml`:
       wordpress:  
         image: takeyamajp/wordpress  
         ports:  
-          - 8080: 80  
+          - "8080:80"  
         environment:  
-          REQUIRE_SSL: false  
+          REQUIRE_SSL: "false"  
       mysql:  
         image: takeyamajp/mysql  
 
