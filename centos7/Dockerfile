@@ -30,7 +30,7 @@ RUN yum -y install system-logos mailcap; \
 # PHP (remi for CentOS7)
 RUN yum -y install epel-release; \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm; \
-    yum -y install --disablerepo=ius --enablerepo=remi,remi-php74 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu php-pecl-imagick php-pecl-zip; \
+    yum -y install --disablerepo=ius --enablerepo=remi,remi-php74 php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu php-pecl-imagick php-pecl-zip ghostscript; \
     sed -i 's/^;\(error_log\) .*/\1 = \/dev\/stderr/' /etc/php.ini; \
     yum clean all;
 
