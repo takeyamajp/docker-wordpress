@@ -13,7 +13,7 @@
     
     ENV TIMEZONE Asia/Tokyo
     
-    ENV REQUIRE_SSL true  
+    ENV FORCE_SSL true  
     ENV GZIP_COMPRESSION true
     
     ENV BASIC_AUTH false  
@@ -52,7 +52,7 @@ Example `docker-compose.yml`:
         ports:  
           - "8080:80"  
         environment:  
-          REQUIRE_SSL: "false"  
+          FORCE_SSL: "false"  
       mysql:  
         image: takeyamajp/mysql  
 
@@ -65,8 +65,8 @@ You can use any time zone such as America/Chicago that can be used in CentOS.
 See below for zones.  
 https://www.unicode.org/cldr/charts/latest/verify/zones/en.html
 
-## Require SSL
-If `REQUIRE_SSL` is true, the URL will be redirected automatically from HTTP to HTTPS protocol.
+## Force SSL
+If `FORCE_SSL` is true, the URL will be redirected automatically from HTTP to HTTPS protocol.
 
 ## GZIP Compression
 The `GZIP_COMPRESSION` option will save bandwidth and increase browsing speed.  
