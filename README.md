@@ -6,7 +6,7 @@ Star this repository if it is useful for you.
 
 ## Supported tags and respective Dockerfile links  
 - [`latest`, `centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile)
-- [`centos7 (Ghostscript cannot be supported)`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
+- [`centos7 (Ghostscript cannot be supported on CentOS7)`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
 
 ## Image summary
     FROM centos:centos8  
