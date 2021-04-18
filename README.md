@@ -75,4 +75,4 @@ Normally, It is not necessary to be changed.
 
 ## Basic Authentication
 Set `BASIC_AUTH` true if you want to use Basic Authentication.  
-When `REQUIRE_SSL` is true, it will be used after the protocol is redirected to HTTPS.
+When `FORCE_SSL` is true, it will be used after the protocol is redirected to HTTPS.
