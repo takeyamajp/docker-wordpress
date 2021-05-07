@@ -5,6 +5,7 @@ Star this repository if it is useful for you.
 [![license](https://img.shields.io/github/license/takeyamajp/docker-wordpress.svg)](https://github.com/takeyamajp/docker-wordpress/blob/master/LICENSE)
 
 ## Supported tags and respective Dockerfile links  
+- `rocky8 (Rocky Linux 8.3)`
 - [`latest`, `centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile)
 - [`centos7 (Ghostscript cannot be supported on CentOS7)`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
 
