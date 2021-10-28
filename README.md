@@ -15,6 +15,7 @@ Star this repository if it is useful for you.
     
     ENV TIMEZONE Asia/Tokyo
     
+    ENV HOSTNAME www.example.com  
     ENV FORCE_SSL true  
     ENV GZIP_COMPRESSION true
     
@@ -36,7 +37,10 @@ Star this repository if it is useful for you.
     ENV WORDPRESS_CONFIG_EXTRA param1,param2  
     ENV WORDPRESS_CONFIG_EXTRA_VALUE \'string\',true
     
-    VOLUME /wordpress
+    # WordPress  
+    VOLUME /wordpress  
+    # SSL Certificates  
+    VOLUME /ssl_certs
     
     EXPOSE 80  
     EXPOSE 443
