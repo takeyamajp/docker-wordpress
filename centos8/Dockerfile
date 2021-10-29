@@ -21,6 +21,7 @@ RUN dnf -y install httpd mod_ssl; \
     sed -i 's/\(<Directory\) "\/var\/www\/html">/\1 "\/wordpress">/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(SSLCertificateFile\) .*/\1 \/ssl_certs\/cert.pem/' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\(SSLCertificateKeyFile\) .*/\1 \/ssl_certs\/key.pem/' /etc/httpd/conf.d/ssl.conf; \
+    sed -i 's/^#\(SSLCertificateChainFile\) .*/\1 \/ssl_certs\/chain.pem/' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf.d/ssl.conf; \
@@ -89,23 +90,31 @@ RUN { \
     echo 'sed -i "s/^;\?\(date\.timezone\) =.*/\1 =${ESC_TIMEZONE}/" /etc/php.ini'; \
     echo 'rm -f /var/log/php-fpm/www-error.log'; \
     echo 'touch /var/log/php-fpm/www-error.log'; \
-    echo 'if [ ! -e /ssl_certs/cacert.pem ] || [ ! -e /ssl_certs/cakey.pem ]; then'; \
-    echo '  openssl genrsa -out "/ssl_certs/cakey.pem" 2048 &>/dev/null'; \
-    echo '  openssl req -new -key "/ssl_certs/cakey.pem" -subj "/CN=WordPress CA" -out "/ssl_certs/cacsr.pem"'; \
-    echo '  openssl x509 -req -days 36500 -in "/ssl_certs/cacsr.pem" -signkey "/ssl_certs/cakey.pem" -out "/ssl_certs/cacert.pem" &>/dev/null'; \
-    echo 'fi'; \
-    echo 'echo "01" > /etc/pki/CA/serial'; \
-    echo 'rm -f /etc/pki/CA/index.txt'; \
-    echo 'touch /etc/pki/CA/index.txt'; \
-    echo 'sed -i "/^\(DNS\)\|\(IP\)\.1 = .\+$/d" /etc/pki/tls/openssl.cnf'; \
-    echo 'if [ -n "`echo "${HOSTNAME}" | sed -e "s/[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+//g"`" ]; then'; \
-    echo '  echo "DNS.1 = ${HOSTNAME}" >> /etc/pki/tls/openssl.cnf'; \
+    echo 'sed -i "s/^\(SSLCertificateChainFile .*\)/#\1/" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'if [ ! -e /ssl_certs/cert.pem ] || [ ! -e /ssl_certs/key.pem ]; then'; \
+    echo '  if [ ! -e /ssl_certs/cacert.pem ] || [ ! -e /ssl_certs/cakey.pem ]; then'; \
+    echo '    openssl genrsa -out "/ssl_certs/cakey.pem" 2048 &>/dev/null'; \
+    echo '    openssl req -new -key "/ssl_certs/cakey.pem" -subj "/CN=WordPress CA" -out "/ssl_certs/cacsr.pem"'; \
+    echo '    openssl x509 -req -days 36500 -in "/ssl_certs/cacsr.pem" -signkey "/ssl_certs/cakey.pem" -out "/ssl_certs/cacert.pem" &>/dev/null'; \
+    echo '  fi'; \
+    echo '  echo "01" > /etc/pki/CA/serial'; \
+    echo '  rm -f /etc/pki/CA/index.txt'; \
+    echo '  touch /etc/pki/CA/index.txt'; \
+    echo '  sed -i "/^\(DNS\)\|\(IP\)\.1 = .\+$/d" /etc/pki/tls/openssl.cnf'; \
+    echo '  if [ -n "`echo "${HOSTNAME}" | sed -e "s/[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+//g"`" ]; then'; \
+    echo '    echo "DNS.1 = ${HOSTNAME}" >> /etc/pki/tls/openssl.cnf'; \
+    echo '  else'; \
+    echo '    echo "IP.1 = ${HOSTNAME}" >> /etc/pki/tls/openssl.cnf'; \
+    echo '  fi'; \
+    echo '  openssl genrsa -out "/ssl_certs/key.pem" 2048 &>/dev/null'; \
+    echo '  openssl req -config /etc/pki/tls/openssl.cnf -new -key "/ssl_certs/key.pem" -subj "/CN=${HOSTNAME}" -out "/ssl_certs/csr.pem"'; \
+    echo '  openssl ca -batch -policy policy_anything -config /etc/pki/tls/openssl.cnf -days 36500 -in "/ssl_certs/csr.pem" -cert "/ssl_certs/cacert.pem" -keyfile "/ssl_certs/cakey.pem" -out "/ssl_certs/cert.pem" &>/dev/null'; \
+    echo '  rm -f /ssl_certs/chain.pem'; \
     echo 'else'; \
-    echo '  echo "IP.1 = ${HOSTNAME}" >> /etc/pki/tls/openssl.cnf'; \
+    echo '  if [ -e /ssl_certs/chain.pem ]; then'; \
+    echo '    sed -i "s/^#\(SSLCertificateChainFile .*\)/\1/" /etc/httpd/conf.d/ssl.conf'; \
+    echo '  fi'; \
     echo 'fi'; \
-    echo 'openssl genrsa -out "/ssl_certs/key.pem" 2048 &>/dev/null'; \
-    echo 'openssl req -config /etc/pki/tls/openssl.cnf -new -key "/ssl_certs/key.pem" -subj "/CN=${HOSTNAME}" -out "/ssl_certs/csr.pem"'; \
-    echo 'openssl ca -batch -policy policy_anything -config /etc/pki/tls/openssl.cnf -days 36500 -in "/ssl_certs/csr.pem" -cert "/ssl_certs/cacert.pem" -keyfile "/ssl_certs/cakey.pem" -out "/ssl_certs/cert.pem" &>/dev/null'; \
     echo 'if [ -n "${HTTPD_SERVER_ADMIN}" ]; then'; \
     echo '  sed -i "s/^\(ServerAdmin\) .*/\1 ${HTTPD_SERVER_ADMIN}/" /etc/httpd/conf/httpd.conf'; \
     echo 'fi'; \
