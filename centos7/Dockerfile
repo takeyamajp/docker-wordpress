@@ -10,7 +10,6 @@ RUN mkdir /ssl_certs; \
     echo '[alt_names]' >> /etc/pki/tls/openssl.cnf; \
     echo 'DNS.1 =' >> /etc/pki/tls/openssl.cnf; \
     mkdir -p /etc/pki/CA/newcerts; \
-    echo 'unique_subject = no' > /etc/pki/CA/index.txt.attr; \
     yum clean all;
 
 # httpd (ius for CentOS7)
