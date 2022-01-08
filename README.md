@@ -6,7 +6,7 @@ Star this repository if it is useful for you.
 
 ## Supported tags and respective Dockerfile links  
 - [`latest`, `rocky8`](https://github.com/takeyamajp/docker-wordpress/blob/master/rocky8/Dockerfile) (Rocky Linux)
-- [`centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile) (We'll finish support of CentOS8 in 31 December 2021.)
+- [`centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile) (We have finished support to CentOS 8.)
 - [`centos7 (Ghostscript cannot be supported on CentOS7)`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
 
 ## Image summary
