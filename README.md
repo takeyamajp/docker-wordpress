@@ -5,12 +5,13 @@ Star this repository if it is useful for you.
 [![license](https://img.shields.io/github/license/takeyamajp/docker-wordpress.svg)](https://github.com/takeyamajp/docker-wordpress/blob/master/LICENSE)
 
 ## Supported tags and respective Dockerfile links  
-- [`latest`, `rocky8`](https://github.com/takeyamajp/docker-wordpress/blob/master/rocky8/Dockerfile) (Rocky Linux)
-- [`centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile) (We have finished support to CentOS 8.)
-- [`centos7 (Ghostscript cannot be supported on CentOS7)`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
+- [`latest`, `rocky9`](https://github.com/takeyamajp/docker-wordpress/blob/master/rocky9/Dockerfile) (Rocky Linux 9)
+- [`rocky8`](https://github.com/takeyamajp/docker-wordpress/blob/master/rocky8/Dockerfile) (Rocky Linux 8)
+- [`centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile) (We have finished support for CentOS 8.)
+- [`centos7 (Ghostscript is not available on CentOS7)`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
 
 ## Image summary
-    FROM rockylinux/rockylinux:8  
+    FROM rockylinux/rockylinux:9  
     MAINTAINER "Hiroki Takeyama"
     
     ENV TIMEZONE Asia/Tokyo
