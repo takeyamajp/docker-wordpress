@@ -30,12 +30,12 @@ RUN dnf -y install httpd mod_ssl; \
     rm -f /usr/sbin/suexec; \
     dnf clean all;
 
-# PHP (remi for CentOS8)
+# PHP (remi)
 RUN mkdir /run/php-fpm; \
     dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm; \
     dnf -y install https://rpms.remirepo.net/enterprise/remi-release-8.rpm; \
-    dnf -y module enable php:remi-7.4; \
-    dnf -y install php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu php-pecl-imagick php-pecl-zip ghostscript; \
+    dnf -y module enable php:remi-8.1; \
+    dnf -y install php php-mbstring php-gd php-curl php-xml php-mysqlnd php-opcache php-pecl-apcu php-pecl-imagick php-pecl-zip php-intl ghostscript; \
     sed -i 's/^;\(listen.owner\) .*/\1 = apache/' /etc/php-fpm.d/www.conf; \
     sed -i 's/^;\(listen.group\) .*/\1 = apache/' /etc/php-fpm.d/www.conf; \
     sed -i 's/^\(listen.acl_users .*\)/;\1/' /etc/php-fpm.d/www.conf; \
