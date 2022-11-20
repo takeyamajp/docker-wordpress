@@ -113,6 +113,11 @@ RUN { \
     echo '    sed -i "s/^#\(SSLCertificateChainFile .*\)/\1/" /etc/httpd/conf.d/ssl.conf'; \
     echo '  fi'; \
     echo 'fi'; \
+    echo 'rm -f /etc/pki/ca-trust/source/anchors/cacert.pem'; \
+    echo 'if [ -e /ssl_certs/cacert.pem ]; then'; \
+    echo '  cp /ssl_certs/cacert.pem /etc/pki/ca-trust/source/anchors/'; \
+    echo 'fi'; \
+    echo 'update-ca-trust extract'; \
     echo 'if [ -n "${HTTPD_SERVER_ADMIN}" ]; then'; \
     echo '  sed -i "s/^\(ServerAdmin\) .*/\1 ${HTTPD_SERVER_ADMIN}/" /etc/httpd/conf/httpd.conf'; \
     echo 'fi'; \
