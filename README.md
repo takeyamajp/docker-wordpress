@@ -5,8 +5,8 @@ Star this repository if it is useful for you.
 [![license](https://img.shields.io/github/license/takeyamajp/docker-wordpress.svg)](https://github.com/takeyamajp/docker-wordpress/blob/master/LICENSE)
 
 ## Supported tags and respective Dockerfile links  
-- [`latest`, `rocky9`](https://github.com/takeyamajp/docker-wordpress/blob/master/rocky9/Dockerfile) (Rocky Linux 9)
-- [`rocky8`](https://github.com/takeyamajp/docker-wordpress/blob/master/rocky8/Dockerfile) (Rocky Linux 8)
+- [`latest`, `rocky9`](https://github.com/takeyamajp/docker-wordpress/blob/master/rocky9/Dockerfile) (Rocky Linux 9) [`alma9`](https://github.com/takeyamajp/docker-wordpress/blob/master/alma9/Dockerfile) (AlmaLinux 9)
+- [`rocky8`](https://github.com/takeyamajp/docker-wordpress/blob/master/rocky8/Dockerfile) (Rocky Linux 8) [`alma8`](https://github.com/takeyamajp/docker-wordpress/blob/master/alma8/Dockerfile) (AlmaLinux 8)
 - [`centos8`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos8/Dockerfile) (We have finished support for CentOS 8.)
 - [`centos7 (Ghostscript is not available on CentOS7)`](https://github.com/takeyamajp/docker-wordpress/blob/master/centos7/Dockerfile)
 
